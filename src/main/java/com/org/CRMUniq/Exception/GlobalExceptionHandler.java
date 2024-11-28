@@ -9,6 +9,6 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	private void Exceptions(Exception e, WebRequest request) {
-
+		System.out.println(e);
 	}
 }
