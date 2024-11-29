@@ -15,38 +15,47 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Header -->
     <div class="navbar">
-        <a href="/AdminHome" class="logo">
-            <!-- CRM Application Icon -->
-            <i class="material-icons">business</i>
-            CRM Application
-        </a>
+    <a href="/AdminHome" class="logo d-flex align-items-center">
+        <!-- CRM Application Icon -->
+        <i class="material-icons me-2">business</i>
+        CRM Application
+    </a>
     </div>
-    
-    <!-- Login Form -->
-    <div class="login-container">
-        <!-- Error Message -->
-        <div class="error-message">
-            <c:if test="${not empty error}">
-                <p class="error">${error}</p>
-            </c:if>
+
+    <!-- Main Content (2-Card Layout) -->
+    <main>
+        <!-- Card for Login Form -->
+        <div class="card login-card">
+            <!-- Error Message -->
+            <div class="error-message">
+                <c:if test="${not empty error}">
+                    <p class="error">${error}</p>
+                </c:if>
+            </div>
+
+            <h2>Login</h2>
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
         </div>
 
-        <h2>Login</h2>
-        <form action="/login" method="post">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Login</button>
-            </div>
-        </form>
-    </div>
+        <!-- Card for Image -->
+        <div class="card image-card">
+            <img src="views/css/crm-image.webp" alt="CRM Example Image" class="img-fluid">
+        </div>
+    </main>
+
 </body>
 </html>

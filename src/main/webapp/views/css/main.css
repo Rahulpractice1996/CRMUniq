@@ -146,15 +146,15 @@ footer nav ul li a {
 	text-align: center; /* Centered text */
 }
 
-/* show manager container */
-.showmanagercontainer, .Salescontainer, .ViewSalesUserscontainer {
+/* /* show manager container */
+.showmanagercontainer, .Salescontainer, .ViewSalesUserscontainer, .Leadcontainer {
 	width: 90%;
 	margin: 10px auto;
 	background-color: #fff;
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+} */
 
 h2 {
 	text-align: center;
@@ -263,27 +263,27 @@ button[type="submit"]:hover {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.Leadcontainer h2 {
+.showmanagercontainer h2, .Salescontainer h2, .ViewSalesUserscontainer h2, .Leadcontainer h2  {
 	text-align: center;
 	color: #333;
 }
 
-.Leadcontainer table {
+.showmanagercontainer table, .Salescontainer table, .ViewSalesUserscontainer table, .Leadcontainer  table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 20px;
 }
 
-.Leadcontainer table, .Leadcontainer th, .Leadcontainer td {
+.showmanagercontainer table, .Salescontainer table, .ViewSalesUserscontainer table, .Leadcontainer table, .showmanagercontainer th, .Salescontainer th, .ViewSalesUserscontainer th,  .Leadcontainer th, .showmanagercontainer td, .Salescontainer td, .ViewSalesUserscontainer td, .Leadcontainer td {
 	border: 1px solid #ddd;
 }
 
-.Leadcontainer th, .Leadcontainer td {
+showmanagercontainer th, .Salescontainer th, .ViewSalesUserscontainer th, .Leadcontainer th, .showmanagercontainer td, .Salescontainer td, .ViewSalesUserscontainer td, .Leadcontainer td {
 	padding: 12px;
 	text-align: left;
 }
 
-.Leadcontainer th {
+showmanagercontainer th, .Salescontainer th, .ViewSalesUserscontainer th, .Leadcontainer th {
 	background-color: #f4f4f4;
 }
 
