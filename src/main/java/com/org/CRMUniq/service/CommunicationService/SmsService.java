@@ -9,9 +9,9 @@ import com.twilio.type.PhoneNumber;
 @Service
 public class SmsService {
 
-    private String accountSid = "AC2f16317b7912ce564a4d5dcfc2f08d9e";
+    private String accountSid = "";
 
-    private String authToken = "6137d614fe6b2a050cb97331ace630a1";
+    private String authToken = "";
 
     private String fromPhoneNumber = "+17753695345";
 
