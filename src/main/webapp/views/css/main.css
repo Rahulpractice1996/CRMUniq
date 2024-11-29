@@ -8,13 +8,13 @@ body {
 .navbar {
 	background-color: #007bff;
 	padding: 10px;
-	border-radius: 5px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
 .navbar .logo {
+	padding: 10px;
 	color: #fff;
 	font-size: 24px;
 	text-decoration: none;
@@ -147,9 +147,9 @@ footer nav ul li a {
 }
 
 /* show manager container */
-.showmanagercontainer {
-	width: 80%;
-	margin: 20px auto;
+.showmanagercontainer, .Salescontainer, .ViewSalesUserscontainer {
+	width: 90%;
+	margin: 10px auto;
 	background-color: #fff;
 	padding: 20px;
 	border-radius: 8px;
@@ -176,7 +176,7 @@ h2 {
 }
 
 .search-bar button {
-	padding: 10px 20px;
+	padding: 10px;
 	background-color: #007bff;
 	border: none;
 	border-radius: 8px;
@@ -188,6 +188,25 @@ h2 {
 .search-bar button:hover {
 	background-color: #0056b3;
 }
+
+/* table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f1f1f1;
+        }*/
+
+        .table-header {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
 
 table {
 	width: 100%;
@@ -207,7 +226,6 @@ th, td {
 th {
 	background-color: #f4f4f4;
 }
-
 .action-links a {
 	margin-right: 10px;
 	color: #007bff;
@@ -306,3 +324,41 @@ button[type="submit"]:hover {
 .form-group-dropdown button:hover {
 	background-color: #0056b3;
 }
+
+.dashboard-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+            color: gray;
+            float: right;
+            cursor: pointer;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+        }
+
+       
+
+        .text-muted {
+            font-size: 0.8rem;
+            color: gray;
+        }
+
+        .btn-primary {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
