@@ -8,14 +8,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sales Users</title>
-	<link rel="stylesheet" type="text/css" href="views/css/main.css">
-	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Google Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="views/css/main.css">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!-- Google Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
 </head>
 <body>
-<%@ include file="fragments/nav.jsp" %>
+	<%@ include file="fragments/nav.jsp"%>
 	<div class="Salescontainer">
 		<h2>Show Sales Users</h2>
 		<div class="search-bar">
@@ -48,21 +50,19 @@
 							<td>${SalesUser.contact}</td>
 							<td>
 								<form action="/allocate" method="post">
-								<input type="hidden" name="SuID" value= "${SalesUser.EID}"/>
-									<select id="listSelect" name="MID">
+									<input type="hidden" name="SuID" value="${SalesUser.EID}" /> <select
+										id="listSelect" name="MID">
 										<option value="#">-Select Manager-</option>
 
 										<c:forEach var="manager" items="${allmanagers}">
 											<option value="${manager.EID}">${manager.uname}</option>
 										</c:forEach>
-									</select> 
-
-									<input type="submit" value="Allocate">
+									</select> <input type="submit" value="Allocate">
 								</form>
 							</td>
 							<td class="action-links"><a
-								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">Task View Leads
-									</a></td>
+								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
+									View Leads </a></td>
 
 
 						</tr>
@@ -78,14 +78,14 @@
 
 										<a
 											href="/ViewSalesUsers?managerId=${DAO.managerID}&managerName=${DAO.managerName}">
-											${DAO.managerName} 
+											${DAO.managerName} </a>
 									</c:if>
 								</c:forEach></td>
+
+
 							<td class="action-links"><a
-								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">Task View Leads
-									</a> 
-									
-									</td>
+								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
+									View Leads </a></td>
 
 						</tr>
 					</c:forEach>

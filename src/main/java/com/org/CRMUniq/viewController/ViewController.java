@@ -30,6 +30,8 @@ import com.org.CRMUniq.service.CommunicationService.SmsRequest;
 import com.org.CRMUniq.service.CommunicationService.SmsService;
 import com.org.CRMUniq.service.CommunicationService.TwilioCallService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class ViewController {
 
@@ -50,7 +52,9 @@ public class ViewController {
 	}
 
 	@GetMapping("/AdminHome")
-	public String adminHome(Model model) {
+	public String adminHome(Model model,HttpSession session) {
+		AllUsers User  =(AllUsers) session.getAttribute("users");
+		
 		return "AdminHome";
 	}
 
@@ -63,7 +67,6 @@ public class ViewController {
 	public String addHumanResource(@ModelAttribute("user") AllUsers user, RedirectAttributes redirectAttributes) {
 
 		allUserSevice.addusers(user); // Crm Rest controlle
-
 		redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
 		return "redirect:/AdminHome"; // Redirects to the same form after successful submission
 	}
@@ -271,6 +274,8 @@ public class ViewController {
 		List<AllUsers> allmanagers = allUserSevice.GetByRole("Manager");
 		model.addAttribute("allmanagers", allmanagers);
 
+		
+		
 		return "SalesUser";
 	}
 	
@@ -439,5 +444,18 @@ public class ViewController {
 		return "redirect:LeadDetails?LID="+LID;
 	}
 	
+	//-------------
+	@GetMapping("/ViewTaskSalesUsers")
+	public String ViewTaskSalesUsers(@RequestParam Long SalesUserId ,Model model) {
+		
+		List<Leads> leads = leadService.getAllLeads().stream().filter(l->l.getLeadOwnerId()==SalesUserId).collect(Collectors.toList()); 
+		model.addAttribute("leads", leads);
+		//List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
+		//List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
+		//model.addAttribute("Managers", Managers);
+		//model.addAttribute("SalesUsers", SalesUsers);
+		
+		return "My Smart View";
+	}
 	
 }
