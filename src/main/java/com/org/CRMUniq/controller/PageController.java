@@ -26,8 +26,12 @@ public class PageController {
 
 		
 		if (User!=null &&password.equalsIgnoreCase(User.getPwd())) {
-			String uRole=User.getRole();
+			
+			
+			
 			session.setAttribute("User", User);
+			
+			String uRole=User.getRole();
 			redirectAttributes.addFlashAttribute("users", User);
 			
 			switch (uRole.toLowerCase()) {
