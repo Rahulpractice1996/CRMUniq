@@ -65,7 +65,7 @@ public class ViewController {
 		allUserSevice.addusers(user); // Crm Rest controlle
 
 		redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
-		return "redirect:/AddHumanResource"; // Redirects to the same form after successful submission
+		return "redirect:/AdminHome"; // Redirects to the same form after successful submission
 	}
 
 	@GetMapping("/ShowManagers")

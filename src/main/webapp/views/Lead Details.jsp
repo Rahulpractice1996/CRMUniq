@@ -273,14 +273,6 @@ body {
 
 			<!-- Activity History Section -->
 			<div class="activity-history">
-				<div class="d-flex justify-content-between align-items-center mb-3">
-					<h5>Activity History</h5>
-					<select class="form-control activity-filter">
-						<option value="all">All Time</option>
-						<option value="week">Last Week</option>
-						<option value="month">Last Month</option>
-					</select>
-				</div>
 				<div class="timeline">
 					<c:forEach var="transaction" items="${lead.transactions}">
 						<div class="activity-item">
