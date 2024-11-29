@@ -40,8 +40,8 @@
                             <td>${manager.email}</td>
                             <td>${manager.contact}</td>
                             <td class="action-links">
-                                <a href="/ViewSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}">View Sales Users Details</a>
-                                <a href="/AddSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}">Add Sales Users</a>
+                                <a href="/ViewSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}"><i class="icon material-icons">visibility</i> Team Details</a>
+                                <a href="/AddSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}"><i class="icon material-icons">person_add</i> Sales Users</a>
                             </td>
                             <td>Team Not Allotted</td>
                         </tr>
@@ -53,8 +53,8 @@
                             <td>${manager.email}</td>
                             <td>${manager.contact}</td>
                             <td class="action-links">
-                                <a href="/ViewSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}">View Sales Users Details</a>
-                                <a href="/AddSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}">Add Sales Users</a>
+                                <a href="/ViewSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}"><i class="icon material-icons">visibility</i> Team Details</a>
+                                <a href="/AddSalesUsers?managerId=${manager.EID}&managerName=${manager.uname}"><i class="icon material-icons">person_add</i> Sales Users</a>
                             </td>
                             <td>Team Allotted</td>
                         </tr>

@@ -17,23 +17,16 @@
 <body>
 <%@ include file="fragments/nav.jsp" %>
 	<div class="ViewSalesUserscontainer">
-		<h2>My Sales Users</h2>
-		<div class="search-bar">
-			<form action="/searchManager" method="get">
-				<input type="text" name="managerName"
-					placeholder="Enter manager name" required>
-				<button type="submit">Search</button>
-			</form>
-		</div>
+		<h2>Manager and Team</h2>
 		<div class="manager-details">
 			<table>
 				<tr>
-					<th>Manager ID</th>
 					<th>Manager Name</th>
+					<th>Manager ID</th>
 				</tr>
 				<tr>
-				<td>${manager.EID}</td>
 				<td>${manager.uname}</td>
+				<td>${manager.EID}</td>
 				</tr>
 			</table>
 			<table>
