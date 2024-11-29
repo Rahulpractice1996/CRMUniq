@@ -62,4 +62,9 @@ public class LeadService {
 		
 		return diffInDays;
 	}
+
+	public List<Leads> FindByleadOwnerId(Long id) {
+		List<Leads> leads=leadrepo.findByleadOwnerId(id);
+		return leads;
+	}
 }

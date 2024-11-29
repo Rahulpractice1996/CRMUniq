@@ -30,6 +30,8 @@
 						<th>Mobile</th>
 						<th>Manager</th>
 						<th>Actions</th>
+						<th>Lead Count</th>
+						
 
 					</tr>
 				</thead>
@@ -56,7 +58,14 @@
 							<td class="action-links"><a
 								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
 									View Leads </a></td>
-
+							
+							<td>
+							<c:forEach var="DAO" items="${DAO}">
+									<c:if test="${DAO.salesUserID == SalesUser.EID}">
+									${DAO.salesUserleadsCount}
+									</c:if>
+							</c:forEach>
+							</td>
 
 						</tr>
 					</c:forEach>
@@ -79,6 +88,14 @@
 							<td class="action-links"><a
 								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
 									View Leads </a></td>
+									
+									<td>
+							<c:forEach var="DAO" items="${DAO}">
+									<c:if test="${DAO.salesUserID == SalesUser.EID}">
+									${DAO.salesUserleadsCount}
+									</c:if>
+							</c:forEach>
+							</td>
 
 						</tr>
 					</c:forEach>
