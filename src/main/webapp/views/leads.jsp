@@ -40,7 +40,6 @@
                     <tr>
                         <th>Select</th>
                         <th>Lead Name</th>
-                        <th>Actions</th>
                         <th>Lead Begin on</th>
                         <th>Lead Stage</th>
                         <th>Lead Owner</th>
@@ -53,11 +52,7 @@
                         <tr>
                             <td><input type="checkbox" name="LeadID" value="${lead.LID}"></td>
                             <td>${lead.leadName}</td>
-                            <td class="actions">
-                                <span class="material-symbols-outlined" title="Call">call</span>
-                                <span class="material-symbols-outlined" title="Email">email</span>
-                                <span class="material-symbols-outlined" title="SMS">sms</span>
-                            </td>
+                         
                             <td>${lead.beginDate}</td>
                             <td>${lead.leadStatus}</td>
                             <td>${lead.leadOwner}</td>

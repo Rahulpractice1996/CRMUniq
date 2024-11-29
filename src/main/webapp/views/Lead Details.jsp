@@ -32,13 +32,13 @@ body {
 }
 
 .left-section {
-	flex: 1 1 30%;
-	max-width: 30%;
+	flex: 1 1 35%;
+	max-width: 35%;
 }
 
 .right-section {
-	flex: 1 1 68%;
-	max-width: 68%;
+	flex: 1 1 63%;
+	max-width: 63%;
 }
 
 .header-section, .lead-properties, .activity-history, .right-section-nav
@@ -185,16 +185,16 @@ body {
 		<div class="left-section">
 			<!-- Header Section -->
 			<div class="header-section">
-				<h4 class="lead-name">${leads.leadName}</h4>
-				<p class="lead-location text-muted">${leads.preferedLocation},
+				<h4 class="lead-name">${lead.leadName}</h4>
+				<p class="lead-location text-muted">${lead.preferedLocation},
 					Tamil Nadu, India</p>
 				<!-- Display current status as a badge -->
-				<span class="status-badge">${leads.leadStatus}</span>
+				<span class="status-badge">${lead.leadStatus}</span>
 				<!-- Status Badge and Dropdown Box -->
 				<div class="status-dropdown">
 					<!-- Dropdown menu for selecting a new status -->
-					<form action="LeadDetails" method="get">
-						<input type="hidden" name="LID" value="${leads.LID}"> <select
+					<form action="/ChangeStatus" method="post">
+						<input type="hidden" name="LID" value="${lead.LID}"> <select
 							id="statusSelect" class="status-select" name="status">
 							<option value="new">New</option>
 							<option value="inProgress">In Progress</option>
@@ -226,25 +226,25 @@ body {
 					<b>Lead Properties</b>
 				</h5>
 				<p>
-					<strong>Owner:</strong> ${leads.leadOwner}
+					<strong>Owner:</strong> ${lead.leadOwner}
 				</p>
 				<p>
-					<strong>Lead Created on:</strong> ${leads.beginDate}
+					<strong>Lead Created on:</strong> ${lead.beginDate}
 				</p>
 				<p>
-					<strong>Last Modified on:</strong> ${leads.endDate}
+					<strong>Last Modified on:</strong> ${lead.endDate}
 				</p>
 				<p>
-					<strong>Enquired About:</strong> ${leads.lookingFor}
+					<strong>Enquired About:</strong> ${lead.lookingFor}
 				</p>
 				<p>
-					<strong>Remarks:</strong> ${leads.notes}
+					<strong>Remarks:</strong> ${lead.notes}
 				</p>
 				<p>
-					<strong>Lead Age:</strong> ${leads.leadAge}
+					<strong>Lead Age:</strong> ${lead.leadAge}
 				</p>
 				<p>
-					<strong>leadSource:</strong> ${leads.leadSource}
+					<strong>leadSource:</strong> ${lead.leadSource}
 				</p>
 			</div>
 		</div>
@@ -274,7 +274,7 @@ body {
 			<!-- Activity History Section -->
 			<div class="activity-history">
 				<div class="timeline">
-					<c:forEach var="transaction" items="${leads.transactions}">
+					<c:forEach var="transaction" items="${lead.transactions}">
 						<div class="activity-item">
 							<i class="icon material-icons">${transaction.contactType}</i>
 							<div>
@@ -284,147 +284,12 @@ body {
 						</div>
 					</c:forEach>
 
-					<!-- Sample Activity Items -->
-					<div class="activity-item">
-						<i class="icon material-icons">email </i>
-						<div>
-							<p>
-								Sent notification email with subject: <strong>Full
-									Details about Training</strong>
-							</p>
-							<span class="timestamp">03 Aug 2024 - 04:12 PM</span>
-						</div>
-					</div>
-					<div class="activity-item">
-						<i class="icon material-icons">visibility</i>
-						<div>
-							<p>Viewed landing page Job-Enquiry and submitted form</p>
-							<span class="timestamp">03 Aug 2024 - 04:12 PM</span>
-						</div>
-					</div>
+				
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<!-- Email Modal -->
-	<div class="modal fade" id="emailModal" tabindex="-1" role="dialog"
-		aria-labelledby="emailModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="emailModalLabel">Compose Email</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form action="/sendEmail" method="post">
-						<div class="form-group">
-							<input type="hidden" name="LID" value="${leads.LID}"> <label
-								for="recipientEmail">Recipient Email</label> <input type="email"
-								class="form-control" name="toEmail" value="${leads.email}"
-								readonly name="email" id="recipientEmail"
-								placeholder="Enter recipient's email">
-						</div>
-						<div class="form-group">
-							<label for="subject">Subject</label> <input type="text"
-								class="form-control" id="subject" name="subject"
-								placeholder="Enter subject">
-						</div>
-						<div class="form-group">
-							<label for="message">Message</label>
-							<textarea class="form-control" id="message" rows="5" name="body"
-								placeholder="Enter message"></textarea>
-						</div>
-
-						<button type="submit" class="btn btn-primary">Send Email</button>
-
-					</form>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
-	<!-- SMS Modal -->
-	<div class="modal fade" id="smsModal" tabindex="-1" role="dialog"
-		aria-labelledby="smsModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="smsModalLabel">Compose SMS</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form action="/sms">
-						
-						<div class="form-group">
-						<input type="hidden" name="LID" value="${leads.LID}"> 
-						<label for="phoneNumber">Phone Number</label> 
-						<input type="text"
-							readonly class="form-control" id="phoneNumber"
-							placeholder="Enter phone number" value="${leads.contactNo}">
-				</div>
-
-				<div class="form-group">
-					<label for="smsSubject">Subject</label> <input type="text"
-						class="form-control" id="smsSubject" placeholder="Enter subject">
-				</div>
-				<div class="form-group">
-					<label for="smsBody">Message</label>
-					<textarea class="form-control" id="smsBody" rows="5"
-						placeholder="Enter message"></textarea>
-				</div>
-				<button type="submit" class="btn btn-primary">Send SMS</button>
-
-				</form>
-			</div>
-
-		</div>
-	</div>
-	</div>
-
-	<!-- Phone Modal -->
-	<div class="modal fade" id="phoneModal" tabindex="-1" role="dialog"
-		aria-labelledby="phoneModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="phoneModalLabel">Make a Call</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form>
-
-						<div class="form-group">
-							<label for="phoneNumber">Phone Number</label> <input type="text"
-								readonly class="form-control" id="phoneNumber"
-								placeholder="Enter phone number" value="${leads.contactNo}">
-						</div>
-						<button type="button" class="btn btn-primary">Make Call</button>
-
-					</form>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
-	<!-- Bootstrap and JavaScript -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-
+		<%@ include file="fragments/mailCallSMAPopUpForms.jsp"%>
 
 </body>
 </html>
