@@ -348,7 +348,7 @@ public class ViewController {
 	public String LeadDetails(@RequestParam Long LID,Model model) {
 		
 		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
-		model.addAttribute("leads", leads);
+		model.addAttribute("lead", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
 		model.addAttribute("Managers", Managers);
@@ -356,6 +356,24 @@ public class ViewController {
 
 		
 		return "Lead Details";
+	}
+	
+	@PostMapping("/ChangeStatus")
+	public String ChangeStatus(@RequestParam Long LID, @RequestParam String status) {
+		Leads lead = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+		
+		Transactions obj=new Transactions();
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setRemarks("Old Status: <b>"+lead.getLeadStatus()+" </b>changed in to <b>"+ status +"</b> by User");
+		obj.setLeadStatus(status);
+		obj.setLead(lead);
+		obj.setContactType("visibility");
+		lead.setLeadStatus(status);
+		TransService.saveActivity(obj);		
+		leadService.AddLead(lead);
+
+		return "redirect:LeadDetails?LID="+lead.getLID();
+		
 	}
 	
 	@Autowired

@@ -57,9 +57,8 @@
 								</form>
 							</td>
 							<td class="action-links"><a
-								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">View
-									Leads</a> <a href="/AddSalesUsers?SalesUserId=${SalesUser.EID}">Add
-									Leads</a></td>
+								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">Task View Leads
+									</a></td>
 
 
 						</tr>
@@ -79,9 +78,10 @@
 									</c:if>
 								</c:forEach></td>
 							<td class="action-links"><a
-								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">View
-									Leads</a> <a href="/AddSalesUsers?SalesUserId=${SalesUser.EID}">Add
-									Leads</a></td>
+								href="/ViewSalesUsers?SalesUserId=${SalesUser.EID}">Task View Leads
+									</a> 
+									
+									</td>
 
 						</tr>
 					</c:forEach>
