@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,6 +25,8 @@ import com.org.CRMUniq.service.LeadService;
 import com.org.CRMUniq.service.ManagerService;
 import com.org.CRMUniq.service.SalesUserService;
 import com.org.CRMUniq.service.TransactionService;
+import com.org.CRMUniq.service.CommunicationService.EmailSenderService;
+import com.org.CRMUniq.service.CommunicationService.SendEmail;
 
 @Controller
 public class ViewController {
@@ -351,6 +354,29 @@ public class ViewController {
 
 		
 		return "Lead Details";
+	}
+	
+	@Autowired
+	EmailSenderService emailSenderService;
+	
+	@PostMapping("/sendEmail")
+	public String sendEmail(@ModelAttribute SendEmail sendEmail,@RequestParam Long LID) {
+		emailSenderService.sendEmail(sendEmail);
+		
+		
+		
+		
+		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+
+		Transactions obj=new Transactions();
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"\n mail body: "+sendEmail.getBody());
+		obj.setLeadStatus("Assigned");
+		obj.setLead(leads);
+		obj.setContactType("email");
+		TransService.saveActivity(obj);
+		
+		return "redirect:LeadDetails?LID="+LID;
 	}
 	
 	
