@@ -32,7 +32,7 @@ public class PageController {
 			session.setAttribute("User", User);
 			
 			String uRole=User.getRole();
-			redirectAttributes.addFlashAttribute("users", User);
+			//redirectAttributes.addFlashAttribute("users", User);
 			
 			switch (uRole.toLowerCase()) {
 			case "admin":

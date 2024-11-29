@@ -34,7 +34,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
-
+	AllUsers SessionUser;
 	@Autowired
 	AllUserService allUserSevice;
 	@Autowired
@@ -53,8 +53,9 @@ public class ViewController {
 
 	@GetMapping("/AdminHome")
 	public String adminHome(Model model,HttpSession session) {
-		AllUsers User  =(AllUsers) session.getAttribute("users");
-		
+		SessionUser  =(AllUsers) session.getAttribute("User");
+		model.addAttribute("users", SessionUser); 
+		System.out.println(SessionUser);
 		return "AdminHome";
 	}
 
@@ -258,15 +259,18 @@ public class ViewController {
 					DAO.forEach(D -> {
 
 						if (D.getManagerID() == AllUser.getEID()) {
+							D.setManagerleadsCount((long) leadService.FindByleadOwnerId(D.getManagerID()).size());
 							D.setManagerName(AllUser.getUname());
 						} else if (D.getSalesUserID() == AllUser.getEID()) {
+							D.setSalesUserleadsCount((long) leadService.FindByleadOwnerId(D.getSalesUserID()).size());
 							D.setSalesUserName(AllUser.getUname());
 						}
 					});
 
 				});
-
-		
+				//---------------adding manger lead count and sales useers leads count
+				
+				
 		
 		model.addAttribute("SalesUsersUnasigned",UnassignedSalesUsers);
 		model.addAttribute("SalesUsersAsigned",assignedSalesUsers);
