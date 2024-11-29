@@ -1,23 +1,16 @@
 package com.org.CRMUniq.service.CommunicationService;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter @Setter @AllArgsConstructor @ToString
 public class SmsRequest {
 
-    private String toPhoneNumber;     
+    private String toPhoneNumber;  
+    private String subject; 
     private String message; 
 
-    public String getToPhoneNumber() {
-		return toPhoneNumber;
-	}
 
-	public void setToPhoneNumber(String toPhoneNumber) {
-		this.toPhoneNumber = toPhoneNumber;
-	}
-
-	public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

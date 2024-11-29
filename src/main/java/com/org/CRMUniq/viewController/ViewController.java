@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,6 +26,9 @@ import com.org.CRMUniq.service.SalesUserService;
 import com.org.CRMUniq.service.TransactionService;
 import com.org.CRMUniq.service.CommunicationService.EmailSenderService;
 import com.org.CRMUniq.service.CommunicationService.SendEmail;
+import com.org.CRMUniq.service.CommunicationService.SmsRequest;
+import com.org.CRMUniq.service.CommunicationService.SmsService;
+import com.org.CRMUniq.service.CommunicationService.TwilioCallService;
 
 @Controller
 public class ViewController {
@@ -371,9 +373,49 @@ public class ViewController {
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
 		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"\n mail body: "+sendEmail.getBody());
-		obj.setLeadStatus("Assigned");
+		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("email");
+		TransService.saveActivity(obj);
+		
+		return "redirect:LeadDetails?LID="+LID;
+	}
+	
+	@Autowired
+	SmsService smsService;
+	@PostMapping("/sendSms")
+	public String sendSms(@ModelAttribute SmsRequest smsRequest,@RequestParam Long LID) {
+		
+		//System.out.println(smsRequest);
+		smsService.sendSms(smsRequest);
+		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+		Transactions obj=new Transactions();
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setRemarks("Sent notification Via SMS with subject: "+smsRequest.getSubject()+"\n mail body: "+smsRequest.getMessage());
+		obj.setLeadStatus(leads.getLeadStatus());
+		obj.setLead(leads);
+		obj.setContactType("sms");
+		TransService.saveActivity(obj);
+		
+		return "redirect:LeadDetails?LID="+LID;
+	}
+	
+	@Autowired
+	TwilioCallService callService;
+	
+	@PostMapping("/calling")
+	public String call(@RequestParam String  Contactno,@RequestParam Long LID) {
+		
+		System.out.println(Contactno);
+		String callSatatus=callService.makeCall(Contactno);
+	
+		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+		Transactions obj=new Transactions();
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setRemarks("Call placed into subject : call Status "+ callSatatus);
+		obj.setLeadStatus(leads.getLeadStatus());
+		obj.setLead(leads);
+		obj.setContactType("phone");
 		TransService.saveActivity(obj);
 		
 		return "redirect:LeadDetails?LID="+LID;

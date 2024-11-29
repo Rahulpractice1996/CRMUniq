@@ -369,23 +369,23 @@ body {
 					</button>
 				</div>
 				<div class="modal-body">
-					<form action="/sms">
+					<form action="/sendSms" method="post">
 						
 						<div class="form-group">
 						<input type="hidden" name="LID" value="${leads.LID}"> 
 						<label for="phoneNumber">Phone Number</label> 
 						<input type="text"
-							readonly class="form-control" id="phoneNumber"
-							placeholder="Enter phone number" value="${leads.contactNo}">
+							readonly class="form-control" id="phoneNumber" name="toPhoneNumber"
+							placeholder="Enter phone number" value="+91${leads.contactNo}">
 				</div>
 
 				<div class="form-group">
-					<label for="smsSubject">Subject</label> <input type="text"
-						class="form-control" id="smsSubject" placeholder="Enter subject">
+					<label for="smsSubject">Subject</label>
+					 <input type="text" class="form-control" id="smsSubject" name= "subject" placeholder="Enter subject">
 				</div>
 				<div class="form-group">
 					<label for="smsBody">Message</label>
-					<textarea class="form-control" id="smsBody" rows="5"
+					<textarea class="form-control" id="smsBody" rows="5" name="message"
 						placeholder="Enter message"></textarea>
 				</div>
 				<button type="submit" class="btn btn-primary">Send SMS</button>
@@ -410,14 +410,15 @@ body {
 					</button>
 				</div>
 				<div class="modal-body">
-					<form>
+					<form action="/calling" method="post">
+						<input type="hidden" name="LID" value="${leads.LID}"> 
 
 						<div class="form-group">
 							<label for="phoneNumber">Phone Number</label> <input type="text"
-								readonly class="form-control" id="phoneNumber"
-								placeholder="Enter phone number" value="${leads.contactNo}">
+								readonly class="form-control" id="phoneNumber" name="Contactno"
+								placeholder="Enter phone number" value="+91${leads.contactNo}">
 						</div>
-						<button type="button" class="btn btn-primary">Make Call</button>
+						<button type="submit" class="btn btn-primary">Make Call</button>
 
 					</form>
 				</div>
