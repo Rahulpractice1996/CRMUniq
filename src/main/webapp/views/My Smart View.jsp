@@ -12,16 +12,20 @@
 	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
 <link rel="stylesheet" href="views/css/main.css">
 
+
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+
 </head>
 <body>
 	<%@ include file="fragments/nav.jsp"%>
 	<div class="Leadcontainer">
-		<h2>Leads</h2>
+		<h2>All Leads</h2>
 		<table>
 			<thead>
 				<tr>
 					<th>Lead Name</th>
-					<th>Actions</th>
 					<th>Lead Begin on</th>
 					<th>Lead Stage</th>
 					<th>Lead Owner</th>
@@ -34,10 +38,6 @@
 					<c:if test="${lead.leadStatus != 'Received'}">
 						<tr>
 							<td><a href="/LeadDetails?LID=${lead.LID}">${lead.leadName}</a></td>
-							<td class="actions"><span class="material-symbols-outlined"
-								title="Call">call</span> <span class="material-symbols-outlined"
-								title="Email">email</span> <span
-								class="material-symbols-outlined" title="SMS">sms</span></td>
 							<td>${lead.beginDate}</td>
 							<td>${lead.leadStatus}</td>
 							<td>${lead.leadOwner}- ${lead.leadOwnerRole}</td>
@@ -51,5 +51,7 @@
 		</table>
 		</form>
 	</div>
+	
+	
 </body>
 </html>
