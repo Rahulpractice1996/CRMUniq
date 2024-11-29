@@ -17,14 +17,7 @@
 <body>
 <%@ include file="fragments/nav.jsp" %>
 	<div class="Salescontainer">
-		<h2>Show Sales Users</h2>
-		<div class="search-bar">
-			<form action="/searchManager" method="get">
-				<input type="text" name="managerName"
-					placeholder="Enter manager name" required>
-				<button type="submit">Search</button>
-			</form>
-		</div>
+		<h2>All Sales Users</h2>
 		<div class="SalesUser-details">
 			<table>
 				<thead>

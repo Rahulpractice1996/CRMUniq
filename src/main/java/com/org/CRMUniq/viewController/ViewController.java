@@ -290,7 +290,7 @@ public class ViewController {
 		lead.setBeginDate(new Date());
 		leadService.AddLead(lead);
 		model.addAttribute("message", "Lead added succesfully.!");
-		return "AddNewLead";
+		return "leads";
 	}
 	
 	@GetMapping("/leads")

@@ -9,20 +9,16 @@
     <title>Show Managers</title>
     <link rel="stylesheet" type="text/css" href="views/css/main.css">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!--     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
     <!-- Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 <%@ include file="fragments/nav.jsp" %>
     <div class="showmanagercontainer">
-        <h2>Show Managers</h2>
-        <div class="search-bar">
-            <form action="/searchManager" method="get">
-                <input type="text" name="managerName" placeholder="Enter manager name" required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
+        <h2>All Managers</h2>
         <div class="manager-details">
             <table>
                 <thead>
