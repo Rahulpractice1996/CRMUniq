@@ -161,13 +161,58 @@ h2 {
 	color: #333;
 }
 
+/* Container for the search bar */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Form container for text input and button */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Text box styling */
+.search-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 300px; /* Optional: set a fixed width */
+}
+
+/* Button styling */
+.search-button {
+    padding: 8px 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+
+/* 
 .search-bar {
 	margin-bottom: 20px;
 	display: flex;
-	justify-content: center;
+	align-items: center; 
+	gap: 10px;
 }
 
 .search-bar input[type="text"] {
+	flex: 1;
 	width: 300px;
 	padding: 10px;
 	border: 1px solid #ddd;
@@ -187,7 +232,7 @@ h2 {
 
 .search-bar button:hover {
 	background-color: #0056b3;
-}
+} */
 
 /* table {
             width: 100%;

@@ -151,8 +151,8 @@ body {
 	border: 1px solid #ccc;
 	border-radius: 20px;
 	margin-left: 15px;
-	width: auto; /* Adjust to match the badge size */
-	height: auto;
+	/* width: auto; */ /* Adjust to match the badge size */
+	/* height: auto; */
 }
 
 /* Show the dropdown and button when an option is selected */
@@ -185,7 +185,16 @@ body {
 		<div class="left-section">
 			<!-- Header Section -->
 			<div class="header-section">
-				<h4 class="lead-name">${lead.leadName}</h4>
+				<h4 class="lead-name">${lead.leadName}
+				<!-- Action Buttons (Star, Edit) --> 
+				<button class="btn btn-icon">
+					<i class="material-icons">star</i>
+				</button>
+				<!-- Edit button triggers the modal -->
+				<button class="btn btn-icon" data-toggle="modal" data-target="#addLeadModal">
+					<i class="material-icons">edit</i>
+				</button>
+				</h4>
 				<p class="lead-location text-muted">${lead.preferedLocation},
 					Tamil Nadu, India</p>
 				<!-- Display current status as a badge -->
@@ -206,18 +215,7 @@ body {
 					</form>
 				</div>
 
-				<!-- Action Buttons (Star, Edit, Settings) -->
-				<div class="d-flex">
-					<button class="btn btn-icon">
-						<i class="material-icons">star</i>
-					</button>
-					<button class="btn btn-icon">
-						<i class="material-icons">edit</i>
-					</button>
-					<button class="btn btn-icon">
-						<i class="material-icons">settings</i>
-					</button>
-				</div>
+				
 			</div>
 
 			<!-- Lead Properties Section -->
@@ -290,6 +288,85 @@ body {
 		</div>
 	</div>
 		<%@ include file="fragments/mailCallSMAPopUpForms.jsp"%>
+	<!-- Add Lead Modal -->
+	<div class="modal fade" id="addLeadModal" tabindex="-1" role="dialog" aria-labelledby="addLeadModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="addLeadModalLabel">Update Lead Detail's</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="/addNewLead" method="post">
+						<div class="form-group">
+							<label for="LID">Lead ID:</label>
+							<input type="text" id="LID" name="LID" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<label for="leadName">Lead Name:</label>
+							<input type="text" id="leadName" name="leadName" class="form-control" required>
+						</div>
+						<div class="form-group">
+							<input type="hidden" id="leadStatus" name="leadStatus" value="Received">
+						</div>
+						<div class="form-group">
+							<label for="email">Email:</label>
+							<input type="email" id="email" name="email" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="contactNo">Contact Number:</label>
+							<input type="text" id="contactNo" name="contactNo" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="lookingFor">Looking For:</label>
+							<select id="lookingFor" name="lookingFor" class="form-control">
+								<option value="">-Select-</option>
+								<option value="Full Stack Java">Full Stack Java</option>
+								<option value="Full Stack Python">Full Stack Python</option>
+								<option value="Angular">Angular</option>
+								<option value="React">React</option>
+								<option value="Internship">Internship</option>
+								<option value="Placements">Placements</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="leadSource">Lead Source:</label>
+							<select id="leadSource" name="leadSource" class="form-control">
+								<option value="">-Select-</option>
+								<option value="Walk-in">Walk-in</option>
+								<option value="Social Media">Social Media</option>
+								<option value="Inbound Email">Inbound Email</option>
+								<option value="Inbound SMS">Inbound SMS</option>
+								<option value="Referral Sites">Referral Sites</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="preferedLocation">Preferred Location:</label>
+							<select id="preferedLocation" name="preferedLocation" class="form-control">
+								<option value="">-Select-</option>
+								<option value="Madurai">Madurai</option>
+								<option value="Chennai">Chennai</option>
+								<option value="Bangalore">Bangalore</option>
+								<option value="Tirunelveli">Tirunelveli</option>
+								<option value="Coimbatore">Coimbatore</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="notes">Notes:</label>
+							<textarea id="notes" name="notes" class="form-control" maxlength="1500"></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary">Add Lead</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<!-- Scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
 </body>
 </html>

@@ -17,9 +17,9 @@
 <body>
 <%@ include file="fragments/nav.jsp" %>
 <div class="Leadcontainer">
-    
+    <h2>Leads</h2>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Leads</h2>
+        
         <h4 class="d-inline">
             Quick Add Lead :
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#quickAddLeadModal">
