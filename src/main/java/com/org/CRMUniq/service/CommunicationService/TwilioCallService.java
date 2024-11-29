@@ -1,24 +1,22 @@
 package com.org.CRMUniq.service.CommunicationService;
 
+import java.net.URI;
+
+import org.springframework.stereotype.Service;
+
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Call;
 import com.twilio.type.PhoneNumber;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.net.URI;
 
 @Service
 public class TwilioCallService {
 
-    @Value("${twilio.accountSid}")
-    private String accountSid;
+   
+    private String accountSid = "ACc3b9fee34b78115b728db8b4fae55d51";
 
-    @Value("${twilio.authToken}")
-    private String authToken;
-
-    @Value("${twilio.phoneNumber}")
-    private String twilioPhoneNumber;
+    private String authToken="7529dc6c2ce1b743cd7ab3b76a35f724";
+   
+    private String twilioPhoneNumber ="+16814848996";
 
     public String makeCall(String toPhoneNumber) {
        
