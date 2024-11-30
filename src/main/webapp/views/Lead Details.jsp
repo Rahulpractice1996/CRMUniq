@@ -302,22 +302,22 @@ body {
 					<form action="/addNewLead" method="post">
 						<div class="form-group">
 							<label for="LID">Lead ID:</label>
-							<input type="text" id="LID" name="LID" class="form-control" required>
+							<input type="text" id="LID" name="LID" readonly class="form-control" value ="${lead.LID}"required>
 						</div>
 						<div class="form-group">
 							<label for="leadName">Lead Name:</label>
-							<input type="text" id="leadName" name="leadName" class="form-control" required>
+							<input type="text" id="leadName" name="leadName" value ="${lead.leadName}"class="form-control" required>
 						</div>
 						<div class="form-group">
-							<input type="hidden" id="leadStatus" name="leadStatus" value="Received">
+							<input type="hidden" value ="${lead.leadStatus}" id="leadStatus" name="leadStatus" value="Received">
 						</div>
 						<div class="form-group">
 							<label for="email">Email:</label>
-							<input type="email" id="email" name="email" class="form-control">
+							<input type="email" id="email" name="email" value ="${lead.email}" class="form-control">
 						</div>
 						<div class="form-group">
 							<label for="contactNo">Contact Number:</label>
-							<input type="text" id="contactNo" name="contactNo" class="form-control">
+							<input type="text" id="contactNo" name="contactNo" value ="${lead.contactNo}" class="form-control">
 						</div>
 						<div class="form-group">
 							<label for="lookingFor">Looking For:</label>
@@ -333,7 +333,7 @@ body {
 						</div>
 						<div class="form-group">
 							<label for="leadSource">Lead Source:</label>
-							<select id="leadSource" name="leadSource" class="form-control">
+							<select id="leadSource" name="leadSource"  class="form-control">
 								<option value="">-Select-</option>
 								<option value="Walk-in">Walk-in</option>
 								<option value="Social Media">Social Media</option>
@@ -355,7 +355,7 @@ body {
 						</div>
 						<div class="form-group">
 							<label for="notes">Notes:</label>
-							<textarea id="notes" name="notes" class="form-control" maxlength="1500"></textarea>
+							<textarea id="notes" name="notes" value ="${lead.notes}" class="form-control" maxlength="1500"></textarea>
 						</div>
 						<button type="submit" class="btn btn-primary">Add Lead</button>
 					</form>
