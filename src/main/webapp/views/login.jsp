@@ -17,7 +17,7 @@
 <body>
     <!-- Header -->
     <div class="navbar">
-    <a href="/AdminHome" class="logo d-flex align-items-center">
+    <a href="/login" class="logo d-flex align-items-center">
         <!-- CRM Application Icon -->
         <i class="material-icons me-2">business</i>
         CRM Application
