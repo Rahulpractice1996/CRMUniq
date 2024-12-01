@@ -39,8 +39,8 @@ public class PageController {
 			case "manager":
 				return "redirect:/Managerhome";
 
-			case "employee": 
-				return "redirect:/employeeHome";
+			case "salesuser": 
+				return "redirect:/SalesUserHome";
 			default:
 				return "loginSuccess";
 			}
@@ -50,4 +50,6 @@ public class PageController {
 		}
 
 	}
+	
+	
 }

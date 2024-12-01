@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.org.CRMUniq.Repo.LeadsRepo;
 import com.org.CRMUniq.model.Leads;
+import com.org.CRMUniq.model.DAO.CountLeadsByStatus;
 
 @Service
 public class LeadService {
@@ -67,4 +68,40 @@ public class LeadService {
 		List<Leads> leads=leadrepo.findByleadOwnerId(id);
 		return leads;
 	}
+	
+	public CountLeadsByStatus countStatus() {
+		int Assigned=0;
+		int Enrolled=0;
+		int in_progress=0;
+		int ready_to_join=0;
+		int rejected=0;
+		
+		List<Leads> allLeads = getAllLeads();
+		
+		for(Leads l:allLeads) 
+		{
+			if(l.getLeadStatus().equalsIgnoreCase("Assigned")) 
+			{
+				Assigned++;
+			}
+			else if(l.getLeadStatus().equalsIgnoreCase("Enrolled")) 
+			{
+				Enrolled++;
+			}
+			else if(l.getLeadStatus().equals("in-progress")) 
+			{
+				in_progress++;
+			}
+			else if(l.getLeadStatus().equals("ready-to-join")) 
+			{
+				ready_to_join++;
+			}else if(l.getLeadStatus().equalsIgnoreCase("rejected")) 
+			{
+				rejected++;
+			}
+		}
+		
+		return new CountLeadsByStatus(Assigned,Enrolled,in_progress,ready_to_join,rejected);
+	}
+	
 }
