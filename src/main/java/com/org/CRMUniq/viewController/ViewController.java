@@ -55,7 +55,7 @@ public class ViewController {
 	public String adminHome(Model model,HttpSession session) {
 		SessionUser  =(AllUsers) session.getAttribute("User");
 		model.addAttribute("users", SessionUser); 
-		System.out.println(SessionUser);
+		//System.out.println(SessionUser);
 		return "AdminHome";
 	}
 
@@ -82,7 +82,7 @@ public class ViewController {
 
 		List<Long> assignedMid = managerService.GetAllManagers().stream().filter(a -> !a.getSalesUser().isEmpty())
 				.map(b -> b.getMID()).collect(Collectors.toList());
-		System.out.println(assignedMid);
+		//System.out.println(assignedMid);
 		// System.out.println(UnassignedMid);
 		List<AllUsers> UnassignedManagers = new ArrayList<>();
 		List<AllUsers> assignedManagers = new ArrayList<>();
@@ -295,16 +295,32 @@ public class ViewController {
 	}
 	
 	@PostMapping("/addNewLead")
-	public String addSingleLead(@ModelAttribute Leads lead, Model model) {
+	public String addSingleLead(@ModelAttribute Leads lead, Model model,HttpSession session) {
+		System.out.println(lead);
+		String activity;
+		if(lead.getLID() != null){activity="Edited";}else {activity="Created";}
+		SessionUser  =(AllUsers) session.getAttribute("User");
+
 		lead.setBeginDate(new Date());
-		leadService.AddLead(lead);
+		
+		Transactions obj=new Transactions();
+		obj.setRemarks("Lead has been "+activity+" by "+SessionUser.getUname()+"("+SessionUser.getRole()+" EmpId - "+SessionUser.getEID()+")");
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setContactType("visibility");
+		obj.setLead(leadService.AddLead(lead));
+		TransService.saveActivity(obj);
+		
 		model.addAttribute("message", "Lead added succesfully.!");
-		return "leads";
+		if(SessionUser.getRole().equalsIgnoreCase("manager")) 
+		{
+			return "redirect:/leadsBucket";
+		}
+		return "redirect:leads";
 	}
+	
 	
 	@GetMapping("/leads")
 	private String leads(Model model) {
-		
 		List<Leads> leads = leadService.getAllLeads(); 
 		model.addAttribute("leads", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
@@ -315,7 +331,9 @@ public class ViewController {
 	}
 	@PostMapping("/AllocateLeads")
 	public String AllocateLeads(@RequestParam Long managerId,@RequestParam Long salesUserId,
-			@RequestParam List<Long> LeadID) { 
+			@RequestParam List<Long> LeadID,HttpSession session) { 
+		SessionUser  =(AllUsers) session.getAttribute("User");
+
 		Long EID;
 		if(managerId>salesUserId){EID=managerId;}else {EID=salesUserId;}
 		AllUsers user=allUserSevice.getOneById(EID);
@@ -330,20 +348,42 @@ public class ViewController {
 			l.setEndDate(new Date());
 			Transactions obj=new Transactions();
 			obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-			obj.setRemarks("Assigned to"+username+" "+userRole+"by Admin");
+			obj.setRemarks("Assigned to  "+username+" "+userRole+"  by "+SessionUser.getRole()+" : "+SessionUser.getUname());
 			obj.setLeadStatus("Assigned");
 			obj.setLead(l);
 			obj.setContactType("visibility");
 			TransService.saveActivity(obj);
 		});
 		leadService.AddAllLead(leads);
+		
+		if(SessionUser.getRole().equalsIgnoreCase("manager")) 
+		{
+			return "redirect:/leadsBucket";
+		}
 		return "redirect:leads";
 	}
 	
 	@GetMapping("/mysmartView")
-	public String mysmartView(Model model) {
+	public String mysmartView(Model model,HttpSession session) {
 		
-		List<Leads> leads = leadService.getAllLeads(); 
+		SessionUser  =(AllUsers) session.getAttribute("User");
+		//System.out.println(">>>>>>>>>>>>>"+SessionUser);
+
+		List<Leads> leads;
+		if(SessionUser!=null && SessionUser.getRole().equalsIgnoreCase("Manager"))
+		{
+			// this block for managers MyTaskview
+			leads = leadService.getAllLeads().stream()
+					.filter(l->l.getLeadOwnerId()==SessionUser.getEID() && 
+					!l.getLeadStatus().equalsIgnoreCase("Enrolled"))
+					.filter(l->!l.getLeadStatus().equalsIgnoreCase("rejected"))
+					.collect(Collectors.toList()); 	
+		}
+		else 
+		{
+			leads = leadService.getAllLeads(); 	
+		}
+		
 		model.addAttribute("leads", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
@@ -368,12 +408,14 @@ public class ViewController {
 	}
 	
 	@PostMapping("/ChangeStatus")
-	public String ChangeStatus(@RequestParam Long LID, @RequestParam String status) {
+	public String ChangeStatus(@RequestParam Long LID, @RequestParam String status,HttpSession session) {
+		SessionUser  =(AllUsers) session.getAttribute("User");
+
 		Leads lead = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
 		
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Old Status: <b>"+lead.getLeadStatus()+" </b>changed in to <b>"+ status +"</b> by User");
+		obj.setRemarks("Old Status: <b>"+lead.getLeadStatus()+" </b> changed in to <b>"+ status +"</b> by "+SessionUser.getUname() + " - "+SessionUser.getRole());
 		obj.setLeadStatus(status);
 		obj.setLead(lead);
 		obj.setContactType("visibility");
@@ -399,7 +441,7 @@ public class ViewController {
 
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"\n mail body: "+sendEmail.getBody());
+		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"<br> mail body: "+sendEmail.getBody() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("email");
@@ -418,7 +460,7 @@ public class ViewController {
 		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification Via SMS with subject: "+smsRequest.getSubject()+"\n mail body: "+smsRequest.getMessage());
+		obj.setRemarks("Sent notification Via SMS with subject: "+smsRequest.getSubject()+"<br> Message body: "+smsRequest.getMessage() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("sms");
@@ -439,7 +481,7 @@ public class ViewController {
 		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Call placed into subject : call Status "+ callSatatus);
+		obj.setRemarks("Call placed into subject : call Status "+ callSatatus +  "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("phone");
@@ -452,7 +494,11 @@ public class ViewController {
 	@GetMapping("/ViewTaskSalesUsers")
 	public String ViewTaskSalesUsers(@RequestParam Long SalesUserId ,Model model) {
 		
-		List<Leads> leads = leadService.getAllLeads().stream().filter(l->l.getLeadOwnerId()==SalesUserId).collect(Collectors.toList()); 
+		List<Leads> leads = leadService.getAllLeads().stream().
+				filter(l->l.getLeadOwnerId()==SalesUserId
+						&& !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
+				.filter(l->!l.getLeadStatus().equalsIgnoreCase("rejected"))
+				.collect(Collectors.toList()); 
 		model.addAttribute("leads", leads);
 		//List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		//List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
@@ -462,4 +508,7 @@ public class ViewController {
 		return "My Smart View";
 	}
 	
+	
+
+
 }

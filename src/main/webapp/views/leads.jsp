@@ -141,7 +141,6 @@
                 <label for="notes">Notes:</label>
                 <textarea id="notes" name="notes" class="form-control" maxlength="1500"></textarea>
             </div>
-
             <button type="submit" class="btn btn-primary">Add Lead</button>
         </form>
       </div>
