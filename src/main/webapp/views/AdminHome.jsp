@@ -174,6 +174,65 @@
     </div>
 </div>
 
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ${message}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Failure Modal -->
+<div class="modal fade" id="failureModal" tabindex="-1" aria-labelledby="failureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="failureModalLabel">Failure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ${message}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<c:choose>
+    <c:when test="${status == 'success'}">
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+            });
+        </script>
+    </c:when>
+    <c:when test="${status == 'failure'}">
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const failureModal = new bootstrap.Modal(document.getElementById('failureModal'));
+                failureModal.show();
+            });
+        </script>
+    </c:when>
+</c:choose>
+
+
+
 <!-- Chart.js Scripts -->
 <script>
     const ctx1 = document.getElementById('dailyLeadChart').getContext('2d');
