@@ -10,6 +10,8 @@
               
         </ul>
     </div> -->
+    <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+    
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Google Material Icons -->
@@ -22,7 +24,10 @@
         CRM Application
     </a>
     <ul>
+    <sec:authorize access="hasRole('Manager')">
         <li><a href="/mysmartView">Smart View Leads</a></li>
+     </sec:authorize>
+     
         <li><a href="/leads">All Leads</a></li>
         <li><a href="/ShowManagers">All Managers</a></li>
         <li><a href="/SalesUser">All Sales Users</a></li>
