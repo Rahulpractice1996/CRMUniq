@@ -45,7 +45,7 @@
 
 		<div class="container-fluid mt-4">
 			<div class="d-flex justify-content-between align-items-center mb-3">
-				<h2>${users.role}'s Dashboard | Welcome Mr. ${users.uname}</h2>
+				<h2>${users.role}'sDashboard | Welcome Mr. ${users.uname}</h2>
 			</div>
 
 			<div class="row">
@@ -167,7 +167,7 @@
 			</div>
 
 			<!-- Success Modal -->
-			<div class="modal fade" id="successModal" tabindex="-1"
+			<div class="modal fade" id="emailSuccessModal" tabindex="-1"
 				aria-labelledby="successModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -188,7 +188,7 @@
 			</div>
 
 			<!-- Failure Modal -->
-			<div class="modal fade" id="failureModal" tabindex="-1"
+			<div class="modal fade" id="emailFailureModal" tabindex="-1"
 				aria-labelledby="failureModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -210,20 +210,19 @@
 
 			<!-- Script to Show Modals Based on Flash Attributes -->
 			<script>
-			    document.addEventListener('DOMContentLoaded', function () {
-			        // Use Thymeleaf or other templating engine to inject flash attribute status
-			        const status = /*[[${status}]]*/ ""; // Replace with actual server-side logic
-			        
-			        if (status === 'success') {
-			            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-			            successModal.show();
-			        } else if (status === 'failure') {
-			            const failureModal = new bootstrap.Modal(document.getElementById('failureModal'));
-			            failureModal.show();
-			        }
-			    });
-			</script>
-
+	    document.addEventListener('DOMContentLoaded', function () {
+	        // Use Thymeleaf or other templating engine to inject flash attribute status
+	        const status = /*[[${status}]]*/ ""; // Replace with actual server-side logic
+	        
+	        if (status === 'emailsuccess') {
+	            const successModal = new bootstrap.Modal(document.getElementById('emailSuccessModal'));
+	            successModal.show();
+	        } else if (status === 'emailfailure') {
+	            const failureModal = new bootstrap.Modal(document.getElementById('emailFailureModal'));
+	            failureModal.show();
+	        }
+	    });
+	</script>
 
 			<!-- End of Recently Sent Email Campaigns Row -->
 		</div>
@@ -289,20 +288,19 @@
 </script>
 
 
-<!-- Bootstrap and JavaScript -->
-	<!-- Bootstrap Bundle with Popper -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-OMJ0D0z9l+RxCz4pv/NX0k+qzjTz1y3dtx4ZW/r5KKEV9kpKOJv3yknhOQh1B2XD"
-		crossorigin="anonymous"></script>
+		<!-- Bootstrap and JavaScript -->
+		<!-- Bootstrap Bundle with Popper -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-OMJ0D0z9l+RxCz4pv/NX0k+qzjTz1y3dtx4ZW/r5KKEV9kpKOJv3yknhOQh1B2XD"
+			crossorigin="anonymous"></script>
 
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+		<!-- Bootstrap JS -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
