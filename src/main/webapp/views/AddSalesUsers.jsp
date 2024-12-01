@@ -50,8 +50,9 @@
 								<td>${UnassignedSalesUser.email}</td>
 								<td>${UnassignedSalesUser.contact}</td>
 								<td>-</td>
+								<!--
 								<td class="action-links"><a
-									href="/AddSalesUers?managerId=${manager.EID}">Assign Leads</a></td>
+									href="/AddSalesUers?managerId=${manager.EID}">Assign Leads</a></td> -->
 							</tr>
 						</c:forEach>
 						<!-- Repeat rows as needed with assigned sales user details -->
