@@ -151,7 +151,7 @@
 		</div>
 
 		<!-- Success Modal -->
-		<div class="modal fade" id="successModal" tabindex="-1"
+		<div class="modal fade" id="emailSuccessModal" tabindex="-1"
 			aria-labelledby="successModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -172,7 +172,7 @@
 		</div>
 
 		<!-- Failure Modal -->
-		<div class="modal fade" id="failureModal" tabindex="-1"
+		<div class="modal fade" id="emailFailureModal" tabindex="-1"
 			aria-labelledby="failureModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -198,16 +198,15 @@
 	        // Use Thymeleaf or other templating engine to inject flash attribute status
 	        const status = /*[[${status}]]*/ ""; // Replace with actual server-side logic
 	        
-	        if (status === 'success') {
-	            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+	        if (status === 'emailsuccess') {
+	            const successModal = new bootstrap.Modal(document.getElementById('emailSuccessModal'));
 	            successModal.show();
-	        } else if (status === 'failure') {
-	            const failureModal = new bootstrap.Modal(document.getElementById('failureModal'));
+	        } else if (status === 'emailfailure') {
+	            const failureModal = new bootstrap.Modal(document.getElementById('emailFailureModal'));
 	            failureModal.show();
 	        }
 	    });
 	</script>
-
 
 		<!-- End of Recently Sent Email Campaigns Row -->
 

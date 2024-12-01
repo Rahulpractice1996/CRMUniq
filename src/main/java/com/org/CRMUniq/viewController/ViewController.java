@@ -606,10 +606,10 @@ public class ViewController {
 	            emailSenderService.sendEmail(sendEmail);
 	        });
 
-	        redirectAttributes.addFlashAttribute("status", "success");
+	        redirectAttributes.addFlashAttribute("status", "emailsuccess");
 	        return "redirect:/AdminHome"; // Redirect to the main page
 	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
+	        redirectAttributes.addFlashAttribute("status", "emailfailure");
 	        return "redirect:/AdminHome"; // Redirect to the main page
 	    }
 	}
