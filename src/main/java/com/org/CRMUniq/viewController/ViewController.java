@@ -1,6 +1,5 @@
 package com.org.CRMUniq.viewController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.org.CRMUniq.model.AllUsers;
@@ -31,10 +29,7 @@ import com.org.CRMUniq.service.CommunicationService.SendEmail;
 import com.org.CRMUniq.service.CommunicationService.SmsRequest;
 import com.org.CRMUniq.service.CommunicationService.SmsService;
 import com.org.CRMUniq.service.CommunicationService.TwilioCallService;
-import com.org.CRMUniq.service.ExternalCsvFileService.CsvFileDownloadService;
-import com.org.CRMUniq.service.ExternalCsvFileService.CsvFileUploadService;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -69,27 +64,13 @@ public class ViewController {
 		return "AddHumanResource";
 	}
 
-//	@PostMapping("/addHumanResource")
-//	public String addHumanResource(@ModelAttribute("user") AllUsers user, RedirectAttributes redirectAttributes) {
-//
-//		allUserSevice.addusers(user); // Crm Rest controlle
-//		redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
-//		return "redirect:/AdminHome"; // Redirects to the same form after successful submission
-//	}
-	
 	@PostMapping("/addHumanResource")
 	public String addHumanResource(@ModelAttribute("user") AllUsers user, RedirectAttributes redirectAttributes) {
-	    try {
-	        allUserSevice.addusers(user); // Adding the user
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("message", "Failed to add resource. Please try again.");
-	    }
-	    return "redirect:/AdminHome"; // Redirects to the AdminHome page
-	}
 
+		allUserSevice.addusers(user); // Crm Rest controlle
+		redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
+		return "redirect:/AdminHome"; // Redirects to the same form after successful submission
+	}
 
 	@GetMapping("/ShowManagers")
 	public String ShowManagers(Model model) {
@@ -313,31 +294,7 @@ public class ViewController {
 		return "AddNewLead";
 	}
 	
-//	@PostMapping("/addNewLead")
-//	public String addSingleLead(@ModelAttribute Leads lead, Model model) {
-//		lead.setBeginDate(new Date());
-//		leadService.AddLead(lead);
-//		model.addAttribute("message", "Lead added succesfully.!");
-//		return "leads";
-//	}
-
 	@PostMapping("/addNewLead")
-
-	public String addSingleLead(@ModelAttribute Leads lead, RedirectAttributes redirectAttributes) {
-	    try {
-	        lead.setBeginDate(new Date()); // Set the start date
-	        leadService.AddLead(lead); // Service method to save the lead
-
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("message", "Lead added successfully!");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("message", "Failed to add lead. Please try again.");
-	    }
-
-	    return "redirect:/leads"; // Redirects to the Leads view page
-	}	
-
 	public String addSingleLead(@ModelAttribute Leads lead, Model model,HttpSession session) {
 		System.out.println(lead);
 		String activity;
@@ -362,7 +319,6 @@ public class ViewController {
 	}
 	
 	
-
 	@GetMapping("/leads")
 	private String leads(Model model) {
 		List<Leads> leads = leadService.getAllLeads(); 
@@ -550,38 +506,7 @@ public class ViewController {
 		//model.addAttribute("SalesUsers", SalesUsers);
 		
 		return "My Smart View";
-	}	
-	@Autowired
-	CsvFileUploadService csvFileUploadService;
-	// Upload Leads Endpoint
-	@PostMapping("/uploadLeads")
-	public String uploadLeads(@RequestParam("fileUpload") MultipartFile file, RedirectAttributes redirectAttributes) {
-	    try {
-	    	csvFileUploadService.uploadLeads(file);
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("successMessage", "CSV file uploaded successfully!");
-	    } catch (IOException e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("failureMessage", "Failed to upload CSV file: " + e.getMessage());
-	    }
-	    return "redirect:/leads";
 	}
-    @Autowired
-    CsvFileDownloadService csvFileDownloadService;
-
-    // Download Leads Endpoint
-    @GetMapping("/downloadLeads")
-    public void downloadLeads(HttpServletResponse response, RedirectAttributes redirectAttributes) {
-        try {
-        	csvFileDownloadService.downloadLeads(response);
-            redirectAttributes.addFlashAttribute("status", "success");
-            redirectAttributes.addFlashAttribute("successMessage", "CSV file downloaded successfully!");
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("status", "failure");
-            redirectAttributes.addFlashAttribute("failureMessage", "Failed to download CSV file: " + e.getMessage());
-        }
-    }
-
 	
 	
 

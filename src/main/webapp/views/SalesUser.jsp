@@ -29,7 +29,7 @@
 						<th>Email</th>
 						<th>Mobile</th>
 						<th>Manager</th>
-						<th>View Assigned Leads</th>
+						<th>Actions</th>
 						<th>Lead Count</th>
 						
 
@@ -56,8 +56,8 @@
 								</form>
 							</td>
 							<td class="action-links"><a
-								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">
-									<i class="material-icons">visibility</i> Assigned Leads </a></td>
+								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
+									View Leads </a></td>
 							
 							<td>
 							<c:forEach var="DAO" items="${DAO}">
@@ -86,8 +86,8 @@
 
 
 							<td class="action-links"><a
-								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">
-									<i class="material-icons">visibility</i> Assigned Leads </a></td>
+								href="/ViewTaskSalesUsers?SalesUserId=${SalesUser.EID}">Task
+									View Leads </a></td>
 									
 									<td>
 							<c:forEach var="DAO" items="${DAO}">
