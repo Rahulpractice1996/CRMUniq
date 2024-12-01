@@ -322,24 +322,8 @@ public class ViewController {
 //	}
 
 	@PostMapping("/addNewLead")
-
-	public String addSingleLead(@ModelAttribute Leads lead, RedirectAttributes redirectAttributes) {
-	    try {
-	        lead.setBeginDate(new Date()); // Set the start date
-	        leadService.AddLead(lead); // Service method to save the lead
-
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("message", "Lead added successfully!");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("message", "Failed to add lead. Please try again.");
-	    }
-
-	    return "redirect:/leads"; // Redirects to the Leads view page
-	}	
-
-	public String addSingleLead(@ModelAttribute Leads lead, Model model,HttpSession session) {
-		System.out.println(lead);
+	public String addSingleLead(@ModelAttribute Leads lead, Model model,HttpSession session,RedirectAttributes redirectAttributes) {
+		try {
 		String activity;
 		if(lead.getLID() != null){activity="Edited";}else {activity="Created";}
 		SessionUser  =(AllUsers) session.getAttribute("User");
@@ -353,7 +337,16 @@ public class ViewController {
 		obj.setLead(leadService.AddLead(lead));
 		TransService.saveActivity(obj);
 		
-		model.addAttribute("message", "Lead added succesfully.!");
+		redirectAttributes.addFlashAttribute("status", "success");
+        redirectAttributes.addFlashAttribute("message", "Lead added successfully!");
+		}
+		
+		 catch (Exception e) {
+		        redirectAttributes.addFlashAttribute("status", "failure");
+		        redirectAttributes.addFlashAttribute("message", "Failed to add lead. Please try again.");
+		    }
+
+		
 		if(SessionUser.getRole().equalsIgnoreCase("manager")) 
 		{
 			return "redirect:/leadsBucket";
