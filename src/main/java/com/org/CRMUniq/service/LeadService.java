@@ -28,12 +28,12 @@ public class LeadService {
 		return leadrepo.saveAll(leads);
 	}
 
-	public List<Leads> getAllLeads() {
+	public List<Leads> getAllLeads() 
+	{
 		
 		List<Leads> leads=leadrepo.findAll();
 		
-		leads.forEach(l->{
-			
+		leads.forEach(l->{			
 			l.setLeadAge(CalculateDateDifference( l.getBeginDate(), new Date()));
 			
 		});

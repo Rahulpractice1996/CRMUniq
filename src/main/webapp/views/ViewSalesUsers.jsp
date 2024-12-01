@@ -8,14 +8,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Show Managers</title>
-	<link rel="stylesheet" type="text/css" href="views/css/main.css">
-	<!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Google Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="views/css/main.css">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<!-- Google Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
 </head>
 <body>
-<%@ include file="fragments/nav.jsp" %>
+	<%@ include file="fragments/nav.jsp"%>
 	<div class="ViewSalesUserscontainer">
 		<h2>Manager and Team</h2>
 		<div class="manager-details">
@@ -25,8 +27,8 @@
 					<th>Manager ID</th>
 				</tr>
 				<tr>
-				<td>${manager.uname}</td>
-				<td>${manager.EID}</td>
+					<td>${manager.uname}</td>
+					<td>${manager.EID}</td>
 				</tr>
 			</table>
 			<table>
@@ -47,7 +49,7 @@
 							<td>${salesuser.uname}</td>
 							<td>${salesuser.email}</td>
 							<td>${salesuser.contact}</td>
-
+							<td><a href="/ViewTaskSalesUsers?SalesUserId=${salesuser.EID}">View Leads </a></td>
 						</tr>
 					</c:forEach>
 
