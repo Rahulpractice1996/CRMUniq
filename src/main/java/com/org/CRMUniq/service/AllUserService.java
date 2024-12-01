@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.org.CRMUniq.Repo.AllUsersRepo;
@@ -21,10 +22,11 @@ public class AllUserService
 	ManagerService managerService;
 	@Autowired
 	SalesUserService SUservice;
-
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	public AllUsers addusers(AllUsers user) {
-		
+		user.setPwd(passwordEncoder.encode(user.getPwd()));
 		if(user.getRole().equalsIgnoreCase("manager")) 
 		{
 			AllUsers SavedUser=userRepo.save(user);
