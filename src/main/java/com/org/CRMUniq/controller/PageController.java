@@ -37,7 +37,7 @@ public class PageController {
 			case "admin":
 				return "redirect:/AdminHome";
 			case "manager":
-				return "redirect:/manager/Home";
+				return "redirect:/Managerhome";
 
 			case "employee": 
 				return "redirect:/employeeHome";

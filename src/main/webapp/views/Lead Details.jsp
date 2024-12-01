@@ -186,14 +186,15 @@ body {
 			<!-- Header Section -->
 			<div class="header-section">
 				<h4 class="lead-name">${lead.leadName}
-				<!-- Action Buttons (Star, Edit) --> 
-				<button class="btn btn-icon">
-					<i class="material-icons">star</i>
-				</button>
-				<!-- Edit button triggers the modal -->
-				<button class="btn btn-icon" data-toggle="modal" data-target="#addLeadModal">
-					<i class="material-icons">edit</i>
-				</button>
+					<!-- Action Buttons (Star, Edit) -->
+					<button class="btn btn-icon">
+						<i class="material-icons">star</i>
+					</button>
+					<!-- Edit button triggers the modal -->
+					<button class="btn btn-icon" data-toggle="modal"
+						data-target="#addLeadModal">
+						<i class="material-icons">edit</i>
+					</button>
 				</h4>
 				<p class="lead-location text-muted">${lead.preferedLocation},
 					Tamil Nadu, India</p>
@@ -201,21 +202,33 @@ body {
 				<span class="status-badge">${lead.leadStatus}</span>
 				<!-- Status Badge and Dropdown Box -->
 				<div class="status-dropdown">
-					<!-- Dropdown menu for selecting a new status -->
-					<form action="/ChangeStatus" method="post">
-						<input type="hidden" name="LID" value="${lead.LID}"> <select
-							id="statusSelect" class="status-select" name="status">
-							<option value="new">New</option>
-							<option value="inProgress">In Progress</option>
-							<option value="closed">Closed</option>
-							<option value="rejected">Rejected</option>
-						</select>
-						<!-- Change Status Button -->
-						<input type="submit" class="changeStatus" value="Change Status">
-					</form>
-				</div>
+    <!-- Dropdown menu for selecting a new status -->
+    <form action="/ChangeStatus" method="post" onsubmit="return validateForm()">
+        <input type="hidden" name="LID" value="${lead.LID}">
+        <select id="statusSelect" class="status-select" name="status" required>
+            <option value="">--Select--</option>
+            <option value="in-progress">in-progress</option>
+            <option value="ready-to-join">ready-to-join</option>
+            <option value="Enrolled">Enrolled</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <!-- Change Status Button -->
+        <input type="submit" class="changeStatus" value="Change Status">
+    </form>
+</div>
 
+<script>
+    function validateForm() {
+        var statusSelect = document.getElementById("statusSelect");
+        if (statusSelect.value === "") {
+            return false;
+        }
+        return true;
+    }
+</script>
 				
+
+
 			</div>
 
 			<!-- Lead Properties Section -->
@@ -282,46 +295,53 @@ body {
 						</div>
 					</c:forEach>
 
-				
+
 				</div>
 			</div>
 		</div>
 	</div>
-		<%@ include file="fragments/mailCallSMAPopUpForms.jsp"%>
+	<%@ include file="fragments/mailCallSMAPopUpForms.jsp"%>
 	<!-- Add Lead Modal -->
-	<div class="modal fade" id="addLeadModal" tabindex="-1" role="dialog" aria-labelledby="addLeadModalLabel" aria-hidden="true">
+	<div class="modal fade" id="addLeadModal" tabindex="-1" role="dialog"
+		aria-labelledby="addLeadModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="addLeadModalLabel">Update Lead Detail's</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<h5 class="modal-title" id="addLeadModalLabel">Update Lead
+						Detail's</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
 					<form action="/addNewLead" method="post">
 						<div class="form-group">
-							<label for="LID">Lead ID:</label>
-							<input type="text" id="LID" name="LID" readonly class="form-control" value ="${lead.LID}"required>
+							<label for="LID">Lead ID:</label> <input type="text" id="LID"
+								name="LID" readonly class="form-control" value="${lead.LID}"
+								required>
 						</div>
 						<div class="form-group">
-							<label for="leadName">Lead Name:</label>
-							<input type="text" id="leadName" name="leadName" value ="${lead.leadName}"class="form-control" required>
+							<label for="leadName">Lead Name:</label> <input type="text"
+								id="leadName" name="leadName" value="${lead.leadName}"
+								class="form-control" required>
 						</div>
 						<div class="form-group">
-							<input type="hidden" value ="${lead.leadStatus}" id="leadStatus" name="leadStatus" value="Received">
+							<input type="hidden" value="${lead.leadStatus}" id="leadStatus"
+								name="leadStatus" value="Received">
 						</div>
 						<div class="form-group">
-							<label for="email">Email:</label>
-							<input type="email" id="email" name="email" value ="${lead.email}" class="form-control">
+							<label for="email">Email:</label> <input type="email" id="email"
+								name="email" value="${lead.email}" class="form-control">
 						</div>
 						<div class="form-group">
-							<label for="contactNo">Contact Number:</label>
-							<input type="text" id="contactNo" name="contactNo" value ="${lead.contactNo}" class="form-control">
+							<label for="contactNo">Contact Number:</label> <input type="text"
+								id="contactNo" name="contactNo" value="${lead.contactNo}"
+								class="form-control">
 						</div>
 						<div class="form-group">
-							<label for="lookingFor">Looking For:</label>
-							<select id="lookingFor" name="lookingFor" class="form-control">
+							<label for="lookingFor">Looking For:</label> <select
+								id="lookingFor" name="lookingFor" class="form-control">
 								<option value="">-Select-</option>
 								<option value="Full Stack Java">Full Stack Java</option>
 								<option value="Full Stack Python">Full Stack Python</option>
@@ -332,8 +352,8 @@ body {
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="leadSource">Lead Source:</label>
-							<select id="leadSource" name="leadSource"  class="form-control">
+							<label for="leadSource">Lead Source:</label> <select
+								id="leadSource" name="leadSource" class="form-control">
 								<option value="">-Select-</option>
 								<option value="Walk-in">Walk-in</option>
 								<option value="Social Media">Social Media</option>
@@ -343,8 +363,9 @@ body {
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="preferedLocation">Preferred Location:</label>
-							<select id="preferedLocation" name="preferedLocation" class="form-control">
+							<label for="preferedLocation">Preferred Location:</label> <select
+								id="preferedLocation" name="preferedLocation"
+								class="form-control">
 								<option value="">-Select-</option>
 								<option value="Madurai">Madurai</option>
 								<option value="Chennai">Chennai</option>
@@ -355,7 +376,8 @@ body {
 						</div>
 						<div class="form-group">
 							<label for="notes">Notes:</label>
-							<textarea id="notes" name="notes" value ="${lead.notes}" class="form-control" maxlength="1500"></textarea>
+							<textarea id="notes" name="notes" value="${lead.notes}"
+								class="form-control" maxlength="1500"></textarea>
 						</div>
 						<button type="submit" class="btn btn-primary">Add Lead</button>
 					</form>
@@ -365,8 +387,10 @@ body {
 	</div>
 
 	<!-- Scripts -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
