@@ -66,39 +66,39 @@
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">Total Leads</p>
-									<h4 class="text-dark">90%</h4>
+									<h4 class="text-dark">${countObj.totalLeads}</h4>
 								</div>
 							</div>
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">New Leads</p>
-									<h4 class="text-dark">3%</h4>
+									<h4 class="text-dark">${countObj.newLeads}</h4>
 								</div>
 							</div>
 							<!-- Row 2 -->
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">InProgress Leads</p>
-									<h4 class="text-dark">9,972</h4>
+									<h4 class="text-dark">${countObj.in_progress}</h4>
 								</div>
 							</div>
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">Ready To Join Leads</p>
-									<h4 class="text-dark">91%</h4>
+									<h4 class="text-dark">${countObj.ready_to_join}</h4>
 								</div>
 							</div>
 							<!-- Row 3 -->
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">Rejected Leads</p>
-									<h4 class="text-dark">15%</h4>
+									<h4 class="text-dark">${countObj.rejected}</h4>
 								</div>
 							</div>
 							<div class="col-6 mb-3">
 								<div class="card p-3">
 									<p class="text-dark mb-1">Enrolled Leads</p>
-									<h4 class="text-dark">1,230</h4>
+									<h4 class="text-dark">${countObj.enrolled}</h4>
 								</div>
 							</div>
 						</div>
@@ -122,51 +122,179 @@
 			</div>
 			<!-- End of Row -->
 
+			<!-- Email Form Section -->
 			<div class="row mt-4">
-				<!-- Recently Sent Email Campaigns (Placed Below Key Metrics) -->
 				<div class="col-md-4">
 					<div class="dashboard-card">
 						<div class="d-flex justify-content-between">
 							<span class="card-title">Recently Sent Email Campaigns</span> <i
 								class="material-icons card-icon">email</i>
 						</div>
-						<p class="text-muted mt-3">You haven't sent any emails yet</p>
-						<button class="btn btn-primary">Send Emails Now</button>
+						<p class="text-muted mt-3" id="emailStatus">You haven't sent
+							any emails yet</p>
+						<button class="btn btn-primary" data-bs-toggle="modal"
+							data-bs-target="#emailModal">Send Emails Now</button>
 					</div>
 				</div>
 			</div>
-			<!-- End of Recently Sent Email Campaigns Row -->
 
-		</div>
-	</div>
+			<!-- Modal for Sending Email -->
+			<div class="modal fade" id="emailModal" tabindex="-1"
+				aria-labelledby="emailModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="emailModalLabel">Send Email
+								Campaign</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<form action="/MailtoMultiple" method="POST">
+								<div class="mb-3">
+									<label for="subject" class="form-label">Subject</label> <input
+										type="text" class="form-control" id="subject" name="subject"
+										required>
+								</div>
+								<div class="mb-3">
+									<label for="body" class="form-label">Body</label>
+									<textarea class="form-control" id="body" name="body" rows="4"
+										required></textarea>
+								</div>
+								<div class="d-grid">
+									<button type="submit" class="btn btn-primary">Send
+										Emails</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script>
-		const ctx = document.getElementById('dailyLeadChart').getContext('2d');
-		const dailyLeadChart = new Chart(ctx, {
-			type : 'bar',
-			data : {
-				labels : [ 'TotalLeads', 'NewLeads', 'InProgressLeads',
-						'ReadyToJoinLeads', 'RejectedLeads', 'EnrolledLeads' ],
-				datasets : [ {
-					label : 'NUmber Of Leads',
-					data : [ 12, 19, 3, 5, 2, 3 ],
-					backgroundColor : 'rgba(75, 192, 192, 0.2)',
-					borderColor : 'rgba(75, 192, 192, 1)',
-					borderWidth : 1
-				} ]
-			},
-			options : {
-				scales : {
-					y : {
-						beginAtZero : true
-					}
-				}
-			}
-		});
+			<!-- Success Modal -->
+			<div class="modal fade" id="successModal" tabindex="-1"
+				aria-labelledby="successModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="successModalLabel">Success</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>Emails sent successfully!</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Failure Modal -->
+			<div class="modal fade" id="failureModal" tabindex="-1"
+				aria-labelledby="failureModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="failureModalLabel">Error</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<p>There was an error sending the emails. Please try again.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-bs-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Script to Show Modals Based on Flash Attributes -->
+			<script>
+			    document.addEventListener('DOMContentLoaded', function () {
+			        // Use Thymeleaf or other templating engine to inject flash attribute status
+			        const status = /*[[${status}]]*/ ""; // Replace with actual server-side logic
+			        
+			        if (status === 'success') {
+			            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+			            successModal.show();
+			        } else if (status === 'failure') {
+			            const failureModal = new bootstrap.Modal(document.getElementById('failureModal'));
+			            failureModal.show();
+			        }
+			    });
 	</script>
 
-	<!-- Bootstrap and JavaScript -->
+
+			<!-- End of Recently Sent Email Campaigns Row -->
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+    let dailyLeadChart;
+
+    // Function to fetch real-time data and update the chart
+    function fetchAndUpdateChart() {
+        fetch('/leadMetrics')  // Make an API call to get the latest metrics
+            .then(response => response.json())
+            .then(data => {
+                // Update the chart data
+                if (dailyLeadChart) {
+                    dailyLeadChart.data.datasets[0].data = [
+                        data.totalLeads,
+                        data.newLeads,
+                        data.in_progress,
+                        data.ready_to_join,
+                        data.rejected,
+                        data.enrolled
+                    ];
+                    dailyLeadChart.update(); // Re-render the chart with new data
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Initialize the chart when the page is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('dailyLeadChart').getContext('2d');
+        dailyLeadChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Leads', 'New Leads', 'In Progress Leads', 'Ready To Join Leads', 'Rejected Leads', 'Enrolled Leads'],
+                datasets: [{
+                    label: 'Number of Leads',
+                    data: [0, 0, 0, 0, 0, 0], // Initial data (will be updated later)
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 10  // Set the step size to 10 for intervals
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initial fetch of data to populate the chart
+        fetchAndUpdateChart();
+
+        // Set up an interval to fetch new data every 10 seconds and update the chart
+        setInterval(fetchAndUpdateChart, 10000); // Update every 10 seconds
+    });
+</script>
+
+
+<!-- Bootstrap and JavaScript -->
 	<!-- Bootstrap Bundle with Popper -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -176,5 +304,10 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

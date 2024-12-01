@@ -70,6 +70,9 @@ public class LeadService {
 	}
 	
 	public CountLeadsByStatus countStatus() {
+		int TotalLeads=0;
+		int NewLeads=0;
+		int Recieved=0;
 		int Assigned=0;
 		int Enrolled=0;
 		int in_progress=0;
@@ -80,9 +83,10 @@ public class LeadService {
 		
 		for(Leads l:allLeads) 
 		{
-			if(l.getLeadStatus().equalsIgnoreCase("Assigned")) 
+			if(l.getLeadStatus().equalsIgnoreCase("Assigned") || l.getLeadStatus().equalsIgnoreCase("Recieved")) 
 			{
 				Assigned++;
+				Recieved++;;
 			}
 			else if(l.getLeadStatus().equalsIgnoreCase("Enrolled")) 
 			{
@@ -100,8 +104,10 @@ public class LeadService {
 				rejected++;
 			}
 		}
+		TotalLeads = Recieved+Assigned+Enrolled+in_progress+ready_to_join+rejected;
+		NewLeads = Recieved+Assigned;
 		
-		return new CountLeadsByStatus(Assigned,Enrolled,in_progress,ready_to_join,rejected);
+		return new CountLeadsByStatus(TotalLeads,NewLeads,Enrolled,in_progress,ready_to_join,rejected);
 	}
 	
 }
