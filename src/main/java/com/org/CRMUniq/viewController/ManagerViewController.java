@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.org.CRMUniq.model.AllUsers;
 import com.org.CRMUniq.model.Leads;
+import com.org.CRMUniq.model.DAO.CountLeadsByStatus;
 import com.org.CRMUniq.service.AllUserService;
 import com.org.CRMUniq.service.LeadService;
 import com.org.CRMUniq.service.ManagerService;
@@ -30,6 +31,7 @@ public class ManagerViewController {
 	public String bless(Model model, HttpSession session) {
 		AllUsers SessionUser = (AllUsers) session.getAttribute("User");
 		model.addAttribute("manager", SessionUser);
+		model.addAttribute("countObj", leadService.countStatus());
 		return "Managerhome";
 	}
 

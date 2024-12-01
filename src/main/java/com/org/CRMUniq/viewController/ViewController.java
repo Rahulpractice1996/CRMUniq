@@ -60,7 +60,6 @@ public class ViewController {
 	public String adminHome(Model model, HttpSession session) {
 		SessionUser = (AllUsers) session.getAttribute("User");
 		model.addAttribute("users", SessionUser);
-
 		model.addAttribute("countObj", leadService.countStatus());
 		// System.out.println(SessionUser);
 		return "AdminHome";
@@ -476,20 +475,22 @@ public class ViewController {
 	EmailSenderService emailSenderService;
 
 	@PostMapping("/sendEmail")
-	public String sendEmail(@ModelAttribute SendEmail sendEmail,@RequestParam Long LID) {
-		emailSenderService.sendEmail(sendEmail); 	
-		
-		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+	public String sendEmail(@ModelAttribute SendEmail sendEmail, @RequestParam Long LID) {
+		emailSenderService.sendEmail(sendEmail);
 
-		Transactions obj=new Transactions();
+		Leads leads = leadService.getAllLeads().stream().filter(l -> l.getLID() == LID).findFirst().get();
+
+		Transactions obj = new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"<br> mail body: "+sendEmail.getBody() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"</b>");
+		obj.setRemarks("Sent notification email with subject: " + sendEmail.getSubject() + "<br> mail body: "
+				+ sendEmail.getBody() + "<br> By User <b>" + SessionUser.getUname() + " : " + SessionUser.getRole()
+				+ "</b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("email");
 		TransService.saveActivity(obj);
-		
-		return "redirect:LeadDetails?LID="+LID;
+
+		return "redirect:LeadDetails?LID=" + LID;
 	}
 
 	@Autowired
@@ -585,30 +586,33 @@ public class ViewController {
 		}
 	}
 
-	@GetMapping("/MailtoMultiple")
-	public String MailtoMultiple(@ModelAttribute SendEmail sendEmail,Model model) {
-		
-		List<Leads> leads = leadService.getAllLeads();
-		leads.forEach(l->{
-			
-			
-		
-		Transactions obj = new Transactions();
-		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification email with subject: " + sendEmail.getSubject() + "<br> mail body: "
-				+ sendEmail.getBody() + "<br> By User <b>" + SessionUser.getUname() + " : " + SessionUser.getRole()
-				+ "</b>");
-		obj.setLeadStatus(l.getLeadStatus());
-		obj.setLead(l);
-		obj.setContactType("email");
-		TransService.saveActivity(obj);
-		
-		
-		sendEmail.setToEmail(l.getEmail());
-		emailSenderService.sendEmail(sendEmail);
-		});
-		
-		return null;
+	@PostMapping("/MailtoMultiple")
+	public String MailtoMultiple(@ModelAttribute SendEmail sendEmail, RedirectAttributes redirectAttributes) {
+	    List<Leads> leads = leadService.getAllLeads();
+
+	    try {
+	        leads.forEach(l -> {
+	            Transactions obj = new Transactions();
+	            obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+	            obj.setRemarks("Sent notification email with subject: " + sendEmail.getSubject() + "<br> mail body: "
+	                    + sendEmail.getBody() + "<br> By User <b>" + SessionUser.getUname() + " : "
+	                    + SessionUser.getRole() + "</b>");
+	            obj.setLeadStatus(l.getLeadStatus());
+	            obj.setLead(l);
+	            obj.setContactType("email");
+	            TransService.saveActivity(obj);
+
+	            sendEmail.setToEmail(l.getEmail());
+	            emailSenderService.sendEmail(sendEmail);
+	        });
+
+	        redirectAttributes.addFlashAttribute("status", "success");
+	        return "redirect:/AdminHome"; // Redirect to the main page
+	    } catch (Exception e) {
+	        redirectAttributes.addFlashAttribute("status", "failure");
+	        return "redirect:/AdminHome"; // Redirect to the main page
+	    }
 	}
+
 
 }
