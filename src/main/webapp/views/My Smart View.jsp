@@ -16,7 +16,7 @@
 <body>
 	<%@ include file="fragments/nav.jsp"%>
 	<div class="Leadcontainer">
-		<h2>All Leads</h2>
+		<h2>All Leads for ${user}</h2>
 		<table>
 			<thead>
 				<tr>

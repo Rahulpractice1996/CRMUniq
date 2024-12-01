@@ -57,10 +57,12 @@ public class ViewController {
 	}
 
 	@GetMapping("/AdminHome")
-	public String adminHome(Model model,HttpSession session) {
-		SessionUser  =(AllUsers) session.getAttribute("User");
-		model.addAttribute("users", SessionUser); 
-		//System.out.println(SessionUser);
+	public String adminHome(Model model, HttpSession session) {
+		SessionUser = (AllUsers) session.getAttribute("User");
+		model.addAttribute("users", SessionUser);
+
+		model.addAttribute("countObj", leadService.countStatus());
+		// System.out.println(SessionUser);
 		return "AdminHome";
 	}
 
@@ -76,20 +78,19 @@ public class ViewController {
 //		redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
 //		return "redirect:/AdminHome"; // Redirects to the same form after successful submission
 //	}
-	
+
 	@PostMapping("/addHumanResource")
 	public String addHumanResource(@ModelAttribute("user") AllUsers user, RedirectAttributes redirectAttributes) {
-	    try {
-	        allUserSevice.addusers(user); // Adding the user
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
-	    } catch (Exception e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("message", "Failed to add resource. Please try again.");
-	    }
-	    return "redirect:/AdminHome"; // Redirects to the AdminHome page
+		try {
+			allUserSevice.addusers(user); // Adding the user
+			redirectAttributes.addFlashAttribute("status", "success");
+			redirectAttributes.addFlashAttribute("message", user.getUname() + " - New Resource added successfully!");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("status", "failure");
+			redirectAttributes.addFlashAttribute("message", "Failed to add resource. Please try again.");
+		}
+		return "redirect:/AdminHome"; // Redirects to the AdminHome page
 	}
-
 
 	@GetMapping("/ShowManagers")
 	public String ShowManagers(Model model) {
@@ -101,7 +102,7 @@ public class ViewController {
 
 		List<Long> assignedMid = managerService.GetAllManagers().stream().filter(a -> !a.getSalesUser().isEmpty())
 				.map(b -> b.getMID()).collect(Collectors.toList());
-		//System.out.println(assignedMid);
+		// System.out.println(assignedMid);
 		// System.out.println(UnassignedMid);
 		List<AllUsers> UnassignedManagers = new ArrayList<>();
 		List<AllUsers> assignedManagers = new ArrayList<>();
@@ -178,10 +179,10 @@ public class ViewController {
 
 		});
 
-		//-----------------merging managers and Sales user by Additional DAO
+		// -----------------merging managers and Sales user by Additional DAO
 		List<SalesUser> TeamSalesUser = SUservice.getAllSuByIds(assignedSuid);
 		List<ManagerAndSalesUserCollab> DAO = new ArrayList<>();
-		
+
 		TeamSalesUser.forEach(SalesUser -> {
 			ManagerAndSalesUserCollab obj = new ManagerAndSalesUserCollab();
 			Long SUID = SalesUser.getSUID();
@@ -192,7 +193,7 @@ public class ViewController {
 
 		});
 
-		//-----------------merging managers and Sales user by Additional DAO
+		// -----------------merging managers and Sales user by Additional DAO
 		List<AllUsers> AllUsers = allUserSevice.getAllUsers();
 		AllUsers.forEach(AllUser -> {
 			DAO.forEach(D -> {
@@ -208,7 +209,7 @@ public class ViewController {
 
 		model.addAttribute("UnassignedSalesUsers", UnassignedSalesUsers);
 		model.addAttribute("assignedSalesUsers", assignedSalesUsers);
-		
+
 		model.addAttribute("DAO", DAO);
 		model.addAttribute("managerName", managerName);
 		model.addAttribute("managerId", managerId);
@@ -227,7 +228,7 @@ public class ViewController {
 
 	@GetMapping("/SalesUser")
 	public String SalesUser(Model model) {
-		
+
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
 		List<Long> UnassignedSuid = SUservice.getAllSu().stream().filter(a -> a.getManagerRef() == null)
 				.map(b -> b.getSUID()).collect(Collectors.toList());
@@ -236,7 +237,7 @@ public class ViewController {
 
 		List<Long> assignedSuid = SUservice.getAllSu().stream().filter(a -> a.getManagerRef() != null)
 				.map(b -> b.getSUID()).collect(Collectors.toList());
-		
+
 		List<AllUsers> UnassignedSalesUsers = new ArrayList<>();
 		List<AllUsers> assignedSalesUsers = new ArrayList<>();
 
@@ -258,61 +259,57 @@ public class ViewController {
 
 		});
 
-		//-----------------merging managers and Sales user by Additional DAO
-				List<SalesUser> TeamSalesUser = SUservice.getAllSuByIds(assignedSuid);
-				List<ManagerAndSalesUserCollab> DAO = new ArrayList<>();
-				
-				TeamSalesUser.forEach(SalesUser -> {
-					ManagerAndSalesUserCollab obj = new ManagerAndSalesUserCollab();
-					Long SUID = SalesUser.getSUID();
-					Long MID = SalesUser.getManagerRef().getMID();
-					obj.setSalesUserID(SUID);
-					obj.setManagerID(MID);
-					DAO.add(obj);
+		// -----------------merging managers and Sales user by Additional DAO
+		List<SalesUser> TeamSalesUser = SUservice.getAllSuByIds(assignedSuid);
+		List<ManagerAndSalesUserCollab> DAO = new ArrayList<>();
 
-				});
+		TeamSalesUser.forEach(SalesUser -> {
+			ManagerAndSalesUserCollab obj = new ManagerAndSalesUserCollab();
+			Long SUID = SalesUser.getSUID();
+			Long MID = SalesUser.getManagerRef().getMID();
+			obj.setSalesUserID(SUID);
+			obj.setManagerID(MID);
+			DAO.add(obj);
 
-				//-----------------merging managers and Sales user by Additional DAO
-				List<AllUsers> AllUsers = allUserSevice.getAllUsers();
-				AllUsers.forEach(AllUser -> {
-					DAO.forEach(D -> {
+		});
 
-						if (D.getManagerID() == AllUser.getEID()) {
-							D.setManagerleadsCount((long) leadService.FindByleadOwnerId(D.getManagerID()).size());
-							D.setManagerName(AllUser.getUname());
-						} else if (D.getSalesUserID() == AllUser.getEID()) {
-							D.setSalesUserleadsCount((long) leadService.FindByleadOwnerId(D.getSalesUserID()).size());
-							D.setSalesUserName(AllUser.getUname());
-						}
-					});
+		// -----------------merging managers and Sales user by Additional DAO
+		List<AllUsers> AllUsers = allUserSevice.getAllUsers();
+		AllUsers.forEach(AllUser -> {
+			DAO.forEach(D -> {
 
-				});
-				//---------------adding manger lead count and sales useers leads count
-				
-				
-		
-		model.addAttribute("SalesUsersUnasigned",UnassignedSalesUsers);
-		model.addAttribute("SalesUsersAsigned",assignedSalesUsers);
+				if (D.getManagerID() == AllUser.getEID()) {
+					D.setManagerleadsCount((long) leadService.FindByleadOwnerId(D.getManagerID()).size());
+					D.setManagerName(AllUser.getUname());
+				} else if (D.getSalesUserID() == AllUser.getEID()) {
+					D.setSalesUserleadsCount((long) leadService.FindByleadOwnerId(D.getSalesUserID()).size());
+					D.setSalesUserName(AllUser.getUname());
+				}
+			});
+
+		});
+		// ---------------adding manger lead count and sales useers leads count
+
+		model.addAttribute("SalesUsersUnasigned", UnassignedSalesUsers);
+		model.addAttribute("SalesUsersAsigned", assignedSalesUsers);
 		model.addAttribute("DAO", DAO);
 		List<AllUsers> allmanagers = allUserSevice.GetByRole("Manager");
 		model.addAttribute("allmanagers", allmanagers);
 
-		
-		
 		return "SalesUser";
 	}
-	
+
 	@PostMapping("/allocate")
-	private String allo( @RequestParam Long MID , @RequestParam Long SuID) {
+	private String allo(@RequestParam Long MID, @RequestParam Long SuID) {
 		allUserSevice.allocateSUtoManager(MID, SuID);
 		return "redirect:SalesUser";
 	}
-	
+
 	@GetMapping("/new-leads")
 	private String AddNewLead(Model model) {
 		return "AddNewLead";
 	}
-	
+
 //	@PostMapping("/addNewLead")
 //	public String addSingleLead(@ModelAttribute Leads lead, Model model) {
 //		lead.setBeginDate(new Date());
@@ -322,43 +319,45 @@ public class ViewController {
 //	}
 
 	@PostMapping("/addNewLead")
-	public String addSingleLead(@ModelAttribute Leads lead, Model model,HttpSession session,RedirectAttributes redirectAttributes) {
+	public String addSingleLead(@ModelAttribute Leads lead, Model model, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 		try {
-		String activity;
-		if(lead.getLID() != null){activity="Edited";}else {activity="Created";}
-		SessionUser  =(AllUsers) session.getAttribute("User");
+			String activity;
+			if (lead.getLID() != null) {
+				activity = "Edited";
+			} else {
+				activity = "Created";
+			}
+			SessionUser = (AllUsers) session.getAttribute("User");
 
-		lead.setBeginDate(new Date());
-		
-		Transactions obj=new Transactions();
-		obj.setRemarks("Lead has been "+activity+" by "+SessionUser.getUname()+"("+SessionUser.getRole()+" EmpId - "+SessionUser.getEID()+")");
-		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setContactType("visibility");
-		obj.setLead(leadService.AddLead(lead));
-		TransService.saveActivity(obj);
-		
-		redirectAttributes.addFlashAttribute("status", "success");
-        redirectAttributes.addFlashAttribute("message", "Lead added successfully!");
+			lead.setBeginDate(new Date());
+
+			Transactions obj = new Transactions();
+			obj.setRemarks("Lead has been " + activity + " by " + SessionUser.getUname() + "(" + SessionUser.getRole()
+					+ " EmpId - " + SessionUser.getEID() + ")");
+			obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+			obj.setContactType("visibility");
+			obj.setLead(leadService.AddLead(lead));
+			TransService.saveActivity(obj);
+
+			redirectAttributes.addFlashAttribute("status", "success");
+			redirectAttributes.addFlashAttribute("message", "Lead added successfully!");
 		}
-		
-		 catch (Exception e) {
-		        redirectAttributes.addFlashAttribute("status", "failure");
-		        redirectAttributes.addFlashAttribute("message", "Failed to add lead. Please try again.");
-		    }
 
-		
-		if(SessionUser.getRole().equalsIgnoreCase("manager")) 
-		{
+		catch (Exception e) {
+			redirectAttributes.addFlashAttribute("status", "failure");
+			redirectAttributes.addFlashAttribute("message", "Failed to add lead. Please try again.");
+		}
+
+		if (SessionUser.getRole().equalsIgnoreCase("manager")) {
 			return "redirect:/leadsBucket";
 		}
 		return "redirect:leads";
 	}
-	
-	
 
 	@GetMapping("/leads")
 	private String leads(Model model) {
-		List<Leads> leads = leadService.getAllLeads(); 
+		List<Leads> leads = leadService.getAllLeads();
 		model.addAttribute("leads", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
@@ -366,119 +365,125 @@ public class ViewController {
 		model.addAttribute("SalesUsers", SalesUsers);
 		return "leads";
 	}
+
 	@PostMapping("/AllocateLeads")
-	public String AllocateLeads(@RequestParam Long managerId,@RequestParam Long salesUserId,
-			@RequestParam List<Long> LeadID,HttpSession session) { 
-		SessionUser  =(AllUsers) session.getAttribute("User");
+	public String AllocateLeads(@RequestParam Long managerId, @RequestParam Long salesUserId,
+			@RequestParam List<Long> LeadID, HttpSession session) {
+		SessionUser = (AllUsers) session.getAttribute("User");
 
 		Long EID;
-		if(managerId>salesUserId){EID=managerId;}else {EID=salesUserId;}
-		AllUsers user=allUserSevice.getOneById(EID);
-		String username=user.getUname();
-		String userRole=user.getRole();
-		List<Leads> leads=leadService.getLeadsByIds(LeadID);
-		leads.forEach(l->{
+		if (managerId > salesUserId) {
+			EID = managerId;
+		} else {
+			EID = salesUserId;
+		}
+		AllUsers user = allUserSevice.getOneById(EID);
+		String username = user.getUname();
+		String userRole = user.getRole();
+		List<Leads> leads = leadService.getLeadsByIds(LeadID);
+		leads.forEach(l -> {
 			l.setLeadOwner(username);
 			l.setLeadOwnerId(EID);
 			l.setLeadOwnerRole(userRole);
 			l.setLeadStatus("Assigned");
 			l.setEndDate(new Date());
-			Transactions obj=new Transactions();
+			Transactions obj = new Transactions();
 			obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-			obj.setRemarks("Assigned to  "+username+" "+userRole+"  by "+SessionUser.getRole()+" : "+SessionUser.getUname());
+			obj.setRemarks("Assigned to  " + username + " " + userRole + "  by " + SessionUser.getRole() + " : "
+					+ SessionUser.getUname());
 			obj.setLeadStatus("Assigned");
 			obj.setLead(l);
 			obj.setContactType("visibility");
 			TransService.saveActivity(obj);
 		});
 		leadService.AddAllLead(leads);
-		
-		if(SessionUser.getRole().equalsIgnoreCase("manager")) 
-		{
+
+		if (SessionUser.getRole().equalsIgnoreCase("manager")) {
 			return "redirect:/leadsBucket";
 		}
 		return "redirect:leads";
 	}
-	
+
 	@GetMapping("/mysmartView")
-	public String mysmartView(Model model,HttpSession session) {
-		
-		SessionUser  =(AllUsers) session.getAttribute("User");
-		//System.out.println(">>>>>>>>>>>>>"+SessionUser);
+	public String mysmartView(Model model, HttpSession session) {
+
+		SessionUser = (AllUsers) session.getAttribute("User");
+		// System.out.println(">>>>>>>>>>>>>"+SessionUser);
 
 		List<Leads> leads;
-		if(SessionUser!=null && SessionUser.getRole().equalsIgnoreCase("Manager"))
-		{
+		if (SessionUser != null && SessionUser.getRole().equalsIgnoreCase("Manager")) {
 			// this block for managers MyTaskview
-			leads = leadService.getAllLeads().stream()
-					.filter(l->l.getLeadOwnerId()==SessionUser.getEID() && 
-					!l.getLeadStatus().equalsIgnoreCase("Enrolled"))
-					.filter(l->!l.getLeadStatus().equalsIgnoreCase("rejected"))
-					.collect(Collectors.toList()); 	
+			leads = leadService.getAllLeads().stream().filter(
+					l -> l.getLeadOwnerId() == SessionUser.getEID() && !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
+					.filter(l -> !l.getLeadStatus().equalsIgnoreCase("rejected")).collect(Collectors.toList());
+		} else if (SessionUser != null && SessionUser.getRole().equalsIgnoreCase("SalesUser")) {
+			// this block for Sales user MyTaskview
+			leads = leadService.getAllLeads().stream().filter(
+					l -> l.getLeadOwnerId() == SessionUser.getEID() && !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
+					.filter(l -> !l.getLeadStatus().equalsIgnoreCase("rejected")).collect(Collectors.toList());
+		} else {
+			leads = leadService.getAllLeads();
 		}
-		else 
-		{
-			leads = leadService.getAllLeads(); 	
-		}
-		
+		model.addAttribute("user", SessionUser.getRole());
 		model.addAttribute("leads", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
 		model.addAttribute("Managers", Managers);
 		model.addAttribute("SalesUsers", SalesUsers);
-		
+
 		return "My Smart View";
 	}
-	
+
 	@GetMapping("/LeadDetails")
-	public String LeadDetails(@RequestParam Long LID,Model model) {
-		
-		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
+	public String LeadDetails(@RequestParam Long LID, Model model) {
+
+		Leads leads = leadService.getAllLeads().stream().filter(l -> l.getLID() == LID).findFirst().get();
 		model.addAttribute("lead", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
 		List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
 		model.addAttribute("Managers", Managers);
 		model.addAttribute("SalesUsers", SalesUsers);
 
-		
 		return "Lead Details";
 	}
-	
-	@PostMapping("/ChangeStatus")
-	public String ChangeStatus(@RequestParam Long LID, @RequestParam String status,HttpSession session) {
-		SessionUser  =(AllUsers) session.getAttribute("User");
 
-		Leads lead = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
-		
-		Transactions obj=new Transactions();
+	@PostMapping("/ChangeStatus")
+	public String ChangeStatus(@RequestParam Long LID, @RequestParam String status, HttpSession session) {
+		SessionUser = (AllUsers) session.getAttribute("User");
+
+		Leads lead = leadService.getAllLeads().stream().filter(l -> l.getLID() == LID).findFirst().get();
+
+		Transactions obj = new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Old Status: <b>"+lead.getLeadStatus()+" </b> changed in to <b>"+ status +"</b> by "+SessionUser.getUname() + " - "+SessionUser.getRole());
+		obj.setRemarks("Old Status: <b>" + lead.getLeadStatus() + " </b> changed in to <b>" + status + "</b> by "
+				+ SessionUser.getUname() + " - " + SessionUser.getRole());
 		obj.setLeadStatus(status);
 		obj.setLead(lead);
 		obj.setContactType("visibility");
 		lead.setLeadStatus(status);
-		TransService.saveActivity(obj);		
+		TransService.saveActivity(obj);
 		leadService.AddLead(lead);
 
-		return "redirect:LeadDetails?LID="+lead.getLID();
-		
+		if (lead.getLeadStatus().equalsIgnoreCase("Enrolled") || lead.getLeadStatus().equalsIgnoreCase("rejected")) {
+			return "redirect:mysmartView";
+		}
+
+		return "redirect:LeadDetails?LID=" + lead.getLID();
+
 	}
-	
+
 	@Autowired
 	EmailSenderService emailSenderService;
-	
+
 	@PostMapping("/sendEmail")
 	public String sendEmail(@ModelAttribute SendEmail sendEmail,@RequestParam Long LID) {
-		emailSenderService.sendEmail(sendEmail);
-		
-		
-		
+		emailSenderService.sendEmail(sendEmail); 	
 		
 		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
 
 		Transactions obj=new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"<br> mail body: "+sendEmail.getBody() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
+		obj.setRemarks("Sent notification email with subject: "+sendEmail.getSubject() +"<br> mail body: "+sendEmail.getBody() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"</b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("email");
@@ -486,97 +491,124 @@ public class ViewController {
 		
 		return "redirect:LeadDetails?LID="+LID;
 	}
-	
+
 	@Autowired
 	SmsService smsService;
+
 	@PostMapping("/sendSms")
-	public String sendSms(@ModelAttribute SmsRequest smsRequest,@RequestParam Long LID) {
-		
-		//System.out.println(smsRequest);
+	public String sendSms(@ModelAttribute SmsRequest smsRequest, @RequestParam Long LID) {
+
+		// System.out.println(smsRequest);
 		smsService.sendSms(smsRequest);
-		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
-		Transactions obj=new Transactions();
+		Leads leads = leadService.getAllLeads().stream().filter(l -> l.getLID() == LID).findFirst().get();
+		Transactions obj = new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Sent notification Via SMS with subject: "+smsRequest.getSubject()+"<br> Message body: "+smsRequest.getMessage() + "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
+		obj.setRemarks("Sent notification Via SMS with subject: " + smsRequest.getSubject() + "<br> Message body: "
+				+ smsRequest.getMessage() + "<br> By User <b>" + SessionUser.getUname() + " : " + SessionUser.getRole()
+				+ "<b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("sms");
 		TransService.saveActivity(obj);
-		
-		return "redirect:LeadDetails?LID="+LID;
+
+		return "redirect:LeadDetails?LID=" + LID;
 	}
-	
+
 	@Autowired
 	TwilioCallService callService;
-	
+
 	@PostMapping("/calling")
-	public String call(@RequestParam String  Contactno,@RequestParam Long LID) {
-		
+	public String call(@RequestParam String Contactno, @RequestParam Long LID) {
+
 		System.out.println(Contactno);
-		String callSatatus=callService.makeCall(Contactno);
-	
-		Leads leads = leadService.getAllLeads().stream().filter(l->l.getLID()==LID).findFirst().get(); 
-		Transactions obj=new Transactions();
+		String callSatatus = callService.makeCall(Contactno);
+
+		Leads leads = leadService.getAllLeads().stream().filter(l -> l.getLID() == LID).findFirst().get();
+		Transactions obj = new Transactions();
 		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
-		obj.setRemarks("Call placed into subject : call Status "+ callSatatus +  "<br> By User <b>"+SessionUser.getUname()+" : "+SessionUser.getRole()+"<b>");
+		obj.setRemarks("Call placed into subject : call Status " + callSatatus + "<br> By User <b>"
+				+ SessionUser.getUname() + " : " + SessionUser.getRole() + "<b>");
 		obj.setLeadStatus(leads.getLeadStatus());
 		obj.setLead(leads);
 		obj.setContactType("phone");
 		TransService.saveActivity(obj);
-		
-		return "redirect:LeadDetails?LID="+LID;
+
+		return "redirect:LeadDetails?LID=" + LID;
 	}
-	
-	//-------------
+
+	// -------------
 	@GetMapping("/ViewTaskSalesUsers")
-	public String ViewTaskSalesUsers(@RequestParam Long SalesUserId ,Model model) {
-		
-		List<Leads> leads = leadService.getAllLeads().stream().
-				filter(l->l.getLeadOwnerId()==SalesUserId
-						&& !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
-				.filter(l->!l.getLeadStatus().equalsIgnoreCase("rejected"))
-				.collect(Collectors.toList()); 
+	public String ViewTaskSalesUsers(@RequestParam Long SalesUserId, Model model) {
+
+		List<Leads> leads = leadService.getAllLeads().stream()
+				.filter(l -> l.getLeadOwnerId() == SalesUserId && !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
+				.filter(l -> !l.getLeadStatus().equalsIgnoreCase("rejected")).collect(Collectors.toList());
 		model.addAttribute("leads", leads);
-		//List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
-		//List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
-		//model.addAttribute("Managers", Managers);
-		//model.addAttribute("SalesUsers", SalesUsers);
-		
+		// List<AllUsers> Managers = allUserSevice.GetByRole("Manager");
+		// List<AllUsers> SalesUsers = allUserSevice.GetByRole("SalesUser");
+		// model.addAttribute("Managers", Managers);
+		// model.addAttribute("SalesUsers", SalesUsers);
+
 		return "My Smart View";
-	}	
+	}
+
 	@Autowired
 	CsvFileUploadService csvFileUploadService;
+
 	// Upload Leads Endpoint
 	@PostMapping("/uploadLeads")
 	public String uploadLeads(@RequestParam("fileUpload") MultipartFile file, RedirectAttributes redirectAttributes) {
-	    try {
-	    	csvFileUploadService.uploadLeads(file);
-	        redirectAttributes.addFlashAttribute("status", "success");
-	        redirectAttributes.addFlashAttribute("successMessage", "CSV file uploaded successfully!");
-	    } catch (IOException e) {
-	        redirectAttributes.addFlashAttribute("status", "failure");
-	        redirectAttributes.addFlashAttribute("failureMessage", "Failed to upload CSV file: " + e.getMessage());
-	    }
-	    return "redirect:/leads";
+		try {
+			csvFileUploadService.uploadLeads(file);
+			redirectAttributes.addFlashAttribute("status", "success");
+			redirectAttributes.addFlashAttribute("successMessage", "CSV file uploaded successfully!");
+		} catch (IOException e) {
+			redirectAttributes.addFlashAttribute("status", "failure");
+			redirectAttributes.addFlashAttribute("failureMessage", "Failed to upload CSV file: " + e.getMessage());
+		}
+		return "redirect:/leads";
 	}
-    @Autowired
-    CsvFileDownloadService csvFileDownloadService;
 
-    // Download Leads Endpoint
-    @GetMapping("/downloadLeads")
-    public void downloadLeads(HttpServletResponse response, RedirectAttributes redirectAttributes) {
-        try {
-        	csvFileDownloadService.downloadLeads(response);
-            redirectAttributes.addFlashAttribute("status", "success");
-            redirectAttributes.addFlashAttribute("successMessage", "CSV file downloaded successfully!");
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("status", "failure");
-            redirectAttributes.addFlashAttribute("failureMessage", "Failed to download CSV file: " + e.getMessage());
-        }
-    }
+	@Autowired
+	CsvFileDownloadService csvFileDownloadService;
 
-	
-	
+	// Download Leads Endpoint
+	@GetMapping("/downloadLeads")
+	public void downloadLeads(HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+			csvFileDownloadService.downloadLeads(response);
+			redirectAttributes.addFlashAttribute("status", "success");
+			redirectAttributes.addFlashAttribute("successMessage", "CSV file downloaded successfully!");
+		} catch (IOException e) {
+			redirectAttributes.addFlashAttribute("status", "failure");
+			redirectAttributes.addFlashAttribute("failureMessage", "Failed to download CSV file: " + e.getMessage());
+		}
+	}
 
+	@GetMapping("/MailtoMultiple")
+	public String MailtoMultiple(@ModelAttribute SendEmail sendEmail,Model model) {
+		
+		List<Leads> leads = leadService.getAllLeads();
+		leads.forEach(l->{
+			
+			
+		
+		Transactions obj = new Transactions();
+		obj.setDateTimeStamp(TransService.formatDateTime(new Date()));
+		obj.setRemarks("Sent notification email with subject: " + sendEmail.getSubject() + "<br> mail body: "
+				+ sendEmail.getBody() + "<br> By User <b>" + SessionUser.getUname() + " : " + SessionUser.getRole()
+				+ "</b>");
+		obj.setLeadStatus(l.getLeadStatus());
+		obj.setLead(l);
+		obj.setContactType("email");
+		TransService.saveActivity(obj);
+		
+		
+		sendEmail.setToEmail(l.getEmail());
+		emailSenderService.sendEmail(sendEmail);
+		});
+		
+		return null;
+	}
 
 }
