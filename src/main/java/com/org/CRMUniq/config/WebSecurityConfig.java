@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.org.CRMUniq.service.securityseervice.CustomAuthenticationSuccessHandler;
+import com.org.CRMUniq.service.securityseervice.CustomLogoutSuccessHandler;
 
 /**
  *
@@ -19,7 +20,7 @@ import com.org.CRMUniq.service.securityseervice.CustomAuthenticationSuccessHandl
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	private static final String[] WHITELIST = { "/","/AddHumanResource","/addHumanResource","/AdminHome","/views/**", "/views/css/**", "/views/fragments/**"
+	private static final String[] WHITELIST = { "/","/views/**", "/views/css/**", "/views/fragments/**"
 
 	};
 
@@ -29,7 +30,10 @@ public class WebSecurityConfig {
 	}
 
 	
-	@Autowired private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	@Autowired private 
+	CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	@Autowired private 
+	CustomLogoutSuccessHandler customLogoutSuccessHandler;
 	@Bean
 	public SecurityFilterChain config(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth.requestMatchers(WHITELIST).permitAll().anyRequest().authenticated()
@@ -43,9 +47,14 @@ public class WebSecurityConfig {
 		//defaultSuccessUrl("/AdminHome", true) .
 		failureUrl("/login?error") .
 		permitAll() ) 
-		.logout(logout -> logout .logoutUrl("/logout") 
-				.logoutSuccessUrl("/logout?success") 
-				.permitAll() ) .csrf(csrf -> csrf.disable())
+		.logout(logout -> logout 
+				.logoutUrl("/logout") 
+				.logoutSuccessHandler(customLogoutSuccessHandler) // Use custom success handler
+				//.logoutSuccessUrl("/logout?success")
+				.invalidateHttpSession(true)
+				.deleteCookies("JSESSIONID")
+				.permitAll()) 
+		.csrf(csrf -> csrf.disable())
 		;
         
 		
