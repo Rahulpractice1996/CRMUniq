@@ -51,6 +51,7 @@ public class ManagerViewController {
 					l -> SalesUsersId.contains(l.getLeadOwnerId()) && !l.getLeadStatus().equalsIgnoreCase("Enrolled"))
 					.filter(l -> !l.getLeadStatus().equalsIgnoreCase("rejected")).collect(Collectors.toList());
 		}
+		model.addAttribute("user", SessionUser.getUname());
 
 		model.addAttribute("leads", leads);
 		List<AllUsers> Managers = allUserSevice.GetByRole("Manager");

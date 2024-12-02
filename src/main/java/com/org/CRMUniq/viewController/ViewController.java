@@ -131,10 +131,32 @@ public class ViewController {
 	}
 
 	@GetMapping("/ViewSalesUsers")
-	private String ViewSalesUsersById(@RequestParam Long managerId, Model model) {
-		AllUsers manager = allUserSevice.getOneById(managerId);
+	private String ViewSalesUsersById(@RequestParam String managerId, Model model,HttpSession session) {
+		SessionUser = (AllUsers) session.getAttribute("User");
+		System.out.println(managerId);
+		Long ManagerId;
+		if(managerId!="") 
+		{
+			ManagerId=(long)Integer.parseInt(managerId);
 
-		List<Long> salesUsersBelongtoManagerIds = managerService.getByID(managerId).getSalesUser().stream()
+		}
+		else 
+		{
+			ManagerId=SessionUser.getEID();
+			System.out.println("Else- "+ManagerId);
+		}
+		
+		AllUsers manager;
+		if(ManagerId!=null){
+			manager = allUserSevice.getOneById(ManagerId);
+		}
+		else
+		{
+			manager = allUserSevice.getOneById(SessionUser.getEID());
+		}
+		
+
+		List<Long> salesUsersBelongtoManagerIds = managerService.getByID(ManagerId).getSalesUser().stream()
 				.map(a -> a.getSUID()).collect(Collectors.toList());
 		List<AllUsers> salesUsersBelongtoManager = allUserSevice.getById(salesUsersBelongtoManagerIds);
 

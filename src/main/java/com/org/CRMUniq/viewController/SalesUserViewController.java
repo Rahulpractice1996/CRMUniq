@@ -29,7 +29,9 @@ public class SalesUserViewController {
 	}
 	
 	@GetMapping("/profile")
-	public String profile(Model model) {
+	public String profile(Model model,HttpSession session) {
+		SessionUser  =(AllUsers) session.getAttribute("User");
+
 		model.addAttribute("user", SessionUser);
 		return "profile";
 	}
